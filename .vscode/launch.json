@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+      {
+        "type": "java",
+        "name": "Launch JavaFX",
+        "request": "launch",
+        "mainClass": "com.medialab.MainApp", 
+        "vmArgs": "--module-path \"${workspaceFolder}/../javafx-sdk/lib\" --add-modules javafx.controls,javafx.fxml",
+        "projectName": "TaskManagementSystem",
+        "cwd": "${workspaceFolder}",
+        "preLaunchTask": "build"
+      }
+    ]
+  }
+  

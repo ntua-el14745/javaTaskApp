@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.MainController">
+    <!-- Rest of the layout -->
+    <top>
+        <ToolBar>
+            <Button text="Add Task"/>
+            <Button text="View Tasks"/>
+        </ToolBar>
+    </top>
+    <center>
+        <TableView fx:id="taskTable">
+            <columns>
+                <TableColumn text="Title"/>
+                <TableColumn text="Category"/>
+                <TableColumn text="Priority"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

@@ -1,0 +1,5 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "javafx-sdk-path": "../javafx-sdk",
+   
+}
