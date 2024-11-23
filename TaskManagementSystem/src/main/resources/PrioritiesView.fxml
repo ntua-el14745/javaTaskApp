@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.PrioritiesController" spacing="10" alignment="CENTER">
+    <Label text="Priorities" style="-fx-font-size: 16px;" />
+    <ListView fx:id="prioritiesListView" />
+    <HBox spacing="10" alignment="CENTER">
+        <TextField fx:id="newPriorityField" promptText="Enter new priority" />
+        <Button text="Add" onAction="#handleAddPriority" />
+    </HBox>
+</VBox>

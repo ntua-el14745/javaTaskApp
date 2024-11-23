@@ -1,22 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<!-- <Scene stylesheets="@../application.css"> -->
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.MainController">
     <!-- Rest of the layout -->
+    
     <top>
+        <Label text="Task Management System"/>
         <ToolBar>
-            <Button text="Add Task"/>
-            <Button text="View Tasks"/>
-        </ToolBar>
+      
+            <MenuButton text="Task" fx:id="taskMenuButton" >
+                <MenuItem text="View All Tasks" onAction="#handleLoadTasks" />
+                <MenuItem text="Add Task" onAction="#handleAddTask" />
+                <MenuItem text="Delete Task" onAction="#handleDeleteTask" />
+            </MenuButton>
+            <Button text="Category"  fx:id="categoryMenuButton" styleClass="menu-like-button"/> 
+                <!-- <MenuItem text="View All Categories" onAction="#handleViewCategories" />
+                <MenuItem text="Add Category" onAction="#handleAddCategory" /> -->
+            <!-- </MenuButton> -->
+            <MenuButton text="Priority"  fx:id="priorityMenuButton">
+                <MenuItem text="View All Priorities" onAction="#handleViewPriorities" />
+                <MenuItem text="Add Priority" onAction="#handleAddPriority" />
+            </MenuButton>
+            </ToolBar>
     </top>
     <center>
-        <TableView fx:id="taskTable">
+ 
+        <!-- <TableView fx:id="taskTable">
             <columns>
                 <TableColumn text="Title"/>
                 <TableColumn text="Category"/>
                 <TableColumn text="Priority"/>
             </columns>
-        </TableView>
+        </TableView> -->
+
+         <!-- <GridPane xmlns:fx="http://javafx.com/fxml" >
+    <TextField fx:id="taskTitleField" promptText="Enter Task Title" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <TextArea fx:id="taskDescriptionArea" promptText="Enter Task Description" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    <TextField fx:id="taskCategoryField" promptText="Enter Task Category" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <TextField fx:id="taskPriorityField" promptText="Enter Task Priority" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    <TextField fx:id="taskDeadlineField" promptText="Enter Deadline (yyyy-MM-dd)" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    </GridPane> -->
+    <ListView fx:id="taskListView" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <SplitPane orientation="HORIZONTAL" prefWidth="800" prefHeight="600" xmlns:fx="http://javafx.com/fxml">
+        <items>
+            <!-- Task List -->
+            <VBox>
+                <ListView fx:id="taskListView" onMouseClicked="#handleTaskClick" prefHeight="600" prefWidth="400" />
+            </VBox>
+
+            <!-- Task Details -->
+            <VBox fx:id="detailsPane" spacing="10" alignment="TOP_LEFT" prefWidth="400">
+                <Label text="Task Details" style="-fx-font-weight: bold; -fx-font-size: 16;" />
+                <Label fx:id="titleLabel" text="Title: " />
+                <Label fx:id="descriptionLabel" text="Description: " />
+                <Label fx:id="categoryLabel" text="Category: " />
+                <Label fx:id="priorityLabel" text="Priority: " />
+                <Label fx:id="statusLabel" text="Status: " />
+                <Label fx:id="deadlineLabel" text="Deadline: " />
+            </VBox>
+        </items>
+    </SplitPane>
+
     </center>
+
+   
+
 </BorderPane>
+

@@ -5,19 +5,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Task {
-    private String title;
-    private String description;
+    // private String title;
+    // private String description;
     private Category category;
     private Priority priority;
     private LocalDate deadline;
     private TaskStatus status;
     private List<Reminder> reminders;
-
+    private StringProperty title = new SimpleStringProperty();
+    private StringProperty description = new SimpleStringProperty();
      // Constructor for Jackson
      @JsonCreator
      public Task(@JsonProperty("title") String title, 
@@ -25,8 +29,8 @@ public class Task {
                  @JsonProperty("category") Category category, 
                  @JsonProperty("priority") Priority priority, 
                  @JsonProperty("deadline") LocalDate deadline) {
-         this.title = title;
-         this.description = description;
+         this.title.set(title);
+         this.description.set(description);
          this.category = category;
          this.priority = priority;
          this.deadline = deadline;
@@ -34,19 +38,24 @@ public class Task {
          this.reminders = new ArrayList<>(); 
      }
     public String getTitle() {
+        return title.get();
+    }
+    public StringProperty getTitleProp() {
         return title;
     }
-
+    public StringProperty getDescriptionProp() {
+        return description;
+    }
     public void setTitle(String title) {
-        this.title = title;
+        this.title.set(title);
     }
 
     public String getDescription() {
-        return description;
+        return description.get();
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description.set(description);
     }
 
     public Category getCategory() {

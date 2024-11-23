@@ -8,12 +8,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+// import java.nio.file.Files;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class TaskManager {
     private List<Task> tasks;
     private List<Reminder> reminders; 
+    private List<String> categories = new ArrayList<>();
+    private List<String> priorities = new ArrayList<>();
+
     private static final String TASKS_FILE = "tasks.json";
     private static final String REMINDERS_FILE = "reminders.json";
     private ObjectMapper objectMapper;
@@ -28,8 +31,21 @@ public class TaskManager {
         loadReminders();
         // System.out.println("After loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
     }
+        public void save(){
+            saveTasks();
+            saveReminders();
+        }   
+        public void load(){
+            loadTasks();
+            loadReminders();
+        }   
+        
+
+
         // Save tasks to a JSON file
+
         public void saveTasks() {
+            // System.out.println("Saving tasks: " + tasks);
             try {
                 objectMapper.writeValue(new File(TASKS_FILE), tasks);
             } catch (IOException e) {
@@ -88,7 +104,10 @@ public class TaskManager {
     
     // Add a new task
     public void addTask(Task task) {
+        // System.out.println("Adding task: " + task);
         tasks.add(task);
+        // System.out.println("New task list: " + tasks);
+
     }
 
     // Remove a task
@@ -187,5 +206,25 @@ public class TaskManager {
     // Method to get all reminders
     public List<Reminder> getAllReminders() {
         return reminders;
+    }
+
+    public void addCategory(String category) {
+        if (!categories.contains(category)) {
+            categories.add(category);
+        }
+    }
+
+    public void addPriority(String priority) {
+        if (!priorities.contains(priority)) {
+            priorities.add(priority);
+        }
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public List<String> getPriorities() {
+        return priorities;
     }
 }
