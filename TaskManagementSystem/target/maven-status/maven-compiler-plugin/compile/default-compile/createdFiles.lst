@@ -4,16 +4,13 @@ com/medialab/controllers/TaskController.class
 com/medialab/models/Reminder.class
 com/medialab/models/TaskManager.class
 com/medialab/controllers/CreateTaskController.class
-com/medialab/controllers/AddTaskController.class
-com/medialab/controllers/AddPriorityController.class
+com/medialab/controllers/AddReminderController$1.class
 com/medialab/models/Task.class
 com/medialab/MainApp.class
 com/medialab/models/TaskManager$1.class
 com/medialab/models/TaskManager$2.class
 com/medialab/controllers/BaseController.class
-com/medialab/controllers/AddCategoryController.class
 com/medialab/models/Category.class
 com/medialab/controllers/MainController.class
 com/medialab/models/Reminder$ReminderType.class
 com/medialab/controllers/CategoryController.class
-com/medialab/controllers/PrioritiesController.class
