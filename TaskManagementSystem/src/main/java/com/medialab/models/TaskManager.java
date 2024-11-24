@@ -3,9 +3,12 @@ package com.medialab.models;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+// import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.File;
 import java.io.IOException;
 // import java.nio.file.Files;
@@ -31,6 +34,7 @@ public class TaskManager {
         this.reminders = new ArrayList<>();
         this.objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); 
+        // objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         // System.out.println("Before loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
         load();
         // System.out.println("After loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
@@ -152,9 +156,9 @@ public class TaskManager {
                 if (file.exists() && file.length() > 0) { 
                     reminders = objectMapper.readValue(file, new TypeReference<List<Reminder>>() {});
                     for (Reminder reminder : reminders) {
-                        Task relatedTask = getTaskByTitle(reminder.getRelatedTask().getTitle());
+                        Task relatedTask = getTaskById(reminder.getRelatedTask());
                         if (relatedTask != null) {
-                            reminder.setRelatedTask(relatedTask);  // Set the related task
+                            reminder.setRelatedTask(relatedTask.getId());  // Set the related task
                         }
                     }
                 } else {
@@ -170,15 +174,17 @@ public class TaskManager {
     
     // Add a new task
     public void addTask(Task task) {
-        // System.out.println("Adding task: " + task);
+        if (task.getId() == null || task.getId().isEmpty()) {
+        task.setId(UUID.randomUUID().toString());
+        }
         tasks.add(task);
-        // System.out.println("New task list: " + tasks);
-
     }
 
     // Remove a task
-    public void removeTask(Task task) {
+    public void deleteTask(Task task) {
         tasks.remove(task);
+        // Remove all reminders related to this task
+        reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
     }
 
     // Update a task's status or any other attribute
@@ -212,6 +218,12 @@ public class TaskManager {
         }
         return result;
     }
+    public Task getTaskById(String id) {
+        return tasks.stream()
+                    .filter(task -> task.getId().equals(id))
+                    .findFirst()
+                    .orElse(null);
+    }
     
     // Get tasks by priority
     public List<Task> getTasksByPriority(Priority priority) {
@@ -241,11 +253,13 @@ public class TaskManager {
         tasks.forEach(task -> System.out.println(task));
     }
 
-    // Method to mark a task as completed
     public void markTaskAsCompleted(Task task) {
         task.setStatus(TaskStatus.COMPLETED);
+    
+        // Remove associated reminders
+        reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
+        saveReminders(); // Save changes to reminders
     }
-
     // Method to update task priority
     public void updateTaskPriority(Task task, Priority newPriority) {
         task.setPriority(newPriority);
@@ -254,6 +268,7 @@ public class TaskManager {
     // Method to add a reminder to a task
     public void addReminderToTask(Task task, Reminder reminder) {
         task.addReminder(reminder);
+        reminder.setRelatedTask(task.getId());
         reminders.add(reminder);
     }
 
@@ -265,7 +280,7 @@ public class TaskManager {
       // Method to get all reminders for a task
       public List<Reminder> getRemindersForTask(Task task) {
         return reminders.stream()
-                .filter(reminder -> reminder.getRelatedTask().equals(task))
+                .filter(reminder -> reminder.getRelatedTask().equals(task.getId()))
                 .collect(Collectors.toList());
     }
 
@@ -353,4 +368,19 @@ public class TaskManager {
             priorities.add(DEFAULT_PRIORITY);
         }
     }
+
+
+
+    
+    public void checkDelayedTasks() {
+        LocalDate currentDate = LocalDate.now();
+    
+        for (Task task : tasks) {
+            if (task.getStatus() != TaskStatus.COMPLETED && task.getDeadline().isBefore(currentDate)) {
+                task.setStatus(TaskStatus.DELAYED); // Set task status to DELAYED
+            }
+        }
+        saveTasks(); // Save the tasks after updating statuses
+    }
+
 }
