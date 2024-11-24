@@ -4,9 +4,24 @@
 
 package com.medialab.controllers;
 
-import com.medialab.models.TaskManager;
+// import java.util.List;
+// import java.util.stream.Collectors;
+
+// import com.medialab.models.Task;
+// import com.medialab.models.TaskManager;
+// import com.medialab.models.TaskStatus;
+
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import java.time.LocalDate;
+import java.util.List;
+
+import com.medialab.models.Task;
+import com.medialab.models.TaskManager;
+import com.medialab.models.TaskStatus;
+
+// import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,15 +38,44 @@ public class MainController {
     private Button categoryButton;
     @FXML
     private Button priorityButton;
-
+    @FXML private Label totalTasksLabel;
+    @FXML private Label completedTasksLabel;
+    @FXML private Label delayedTasksLabel;
+    @FXML private Label upcomingTasksLabel;
     private TaskManager taskManager;
 
+    @FXML
+    public void initialize() {
+        taskManager = TaskManager.getInstance();
+        // Call the method to update task statistics
+        updateTaskStatistics();
+        // // Check for delayed tasks and update their status
+        // taskManager.checkDelayedTasks();
+
+        // // Show a pop-up window with delayed tasks
+        // showDelayedTasksPopup();
+    }
+    // Method to update task statistics
+    private void updateTaskStatistics() {
+        List<Task> allTasks = taskManager.getAllTasks();
+
+        int totalTasks = allTasks.size();
+        int completedTasks = (int) allTasks.stream().filter(task -> task.getStatus() == TaskStatus.COMPLETED).count();
+        int delayedTasks = (int) allTasks.stream().filter(task -> task.getStatus() == TaskStatus.DELAYED).count();
+        int upcomingTasks = (int) allTasks.stream().filter(task -> !task.getDeadline().isAfter(LocalDate.now().plusDays(7))).count();
+
+        // Set the values for the labels
+        totalTasksLabel.setText("Total Tasks: " + totalTasks);
+        completedTasksLabel.setText("Completed Tasks: " + completedTasks);
+        delayedTasksLabel.setText("Delayed Tasks: " + delayedTasks);
+        upcomingTasksLabel.setText("Upcoming Tasks (within 7 days): " + upcomingTasks);
+    }
     public void navigateToTaskScene() {
         switchScene("/com/medialab/views/TaskView.fxml");
     }
 
     public void navigateToReminderScene() {
-        switchScene("/com/medialab/views/ReminderView.fxml");
+        switchScene("/com/medialab/views/AllRemindersView.fxml");
     }
 
     public void navigateToCategoryScene() {
@@ -49,9 +93,6 @@ public class MainController {
     }
 
 
-    public void setTaskManager(TaskManager taskManager) {
-        this.taskManager = taskManager;
-    }
     public void switchScene(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -79,9 +120,8 @@ public class MainController {
         }
     }
 
-    public TaskManager getTaskManager() {
-        return taskManager;
-    }
+
+
     
 }
 
