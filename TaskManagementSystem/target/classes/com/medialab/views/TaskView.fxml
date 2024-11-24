@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.TaskController">
+    <top>
+        <HBox spacing="10">
+            <Button text="Back" onAction="#goBack" />
+            <Button text="Create Task" onAction="#navigateToCreateTask" />
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="10">
+            <!-- Search Bar and Task Table -->
+            <TextField fx:id="searchField" promptText="Search tasks by title, category, etc." />
+            <TreeTableView fx:id="taskTreeTable">
+                <columns>
+                    <TreeTableColumn text="Title" fx:id="titleColumn" />
+                    <TreeTableColumn text="Status" fx:id="statusColumn" />
+                    <TreeTableColumn text="Actions" fx:id="actionsColumn" />
+                </columns>
+            </TreeTableView>
+
+            <!-- Task Creation Form -->
+            <!-- <VBox spacing="10" alignment="CENTER">
+                <TextField fx:id="titleField" promptText="Task Title" />
+                <TextArea fx:id="descriptionField" promptText="Task Description" />
+                <ComboBox fx:id="categoryBox" promptText="Select Category" />
+                <ComboBox fx:id="priorityBox" promptText="Select Priority" />
+                <DatePicker fx:id="deadlinePicker" promptText="Select Deadline" />
+                <Button text="Create Task" onAction="#createTask" />
+            </VBox> -->
+        </VBox>
+    </center>
+</BorderPane>
