@@ -3,6 +3,7 @@ package com.medialab.controllers;
 import com.medialab.models.Reminder;
 import com.medialab.models.Task;
 import com.medialab.models.TaskManager;
+import com.medialab.utils.EditReminderDialog;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 // import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -54,25 +56,41 @@ public class ReminderController extends BaseController{
     }
 
     private void setupActionsColumn() {
-        actionsColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button deleteButton = new Button("Delete");
+    actionsColumn.setCellFactory(param -> new TableCell<Reminder, Void>() {
+        private final Button deleteButton = new Button("Delete");
+        private final Button editButton = new Button("Edit");
 
-            {
-                deleteButton.setOnAction(event -> handleDeleteReminder(getTableRow().getItem()));
-            }
+        {
+            deleteButton.setOnAction(event -> handleDeleteReminder(getTableRow().getItem()));
+            editButton.setOnAction(event -> handleEditReminder(getTableRow().getItem()));
+        }
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
+        @Override
+        protected void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
 
-                if (empty || getTableRow().getItem() == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(deleteButton);
+            if (empty || getTableRow().getItem() == null) {
+                setGraphic(null);
+            } else {
+                HBox hbox = new HBox(10);
+                hbox.getChildren().addAll(editButton, deleteButton);
+                setGraphic(hbox);
                 }
             }
         });
     }
+    private void handleEditReminder(Reminder reminder) {
+        if (reminder != null) {
+            // Open an Edit Reminder dialog
+            EditReminderDialog dialog = new EditReminderDialog(reminder);
+            dialog.showAndWait().ifPresent(updatedReminder -> {
+                taskManager.updateReminder(updatedReminder); // Update the reminder in the task manager
+                loadReminders(); // Reload the reminders
+                showAlert("Success", "Reminder updated successfully.", Alert.AlertType.INFORMATION);
+            });
+        }
+    }
+
 
     private void handleDeleteReminder(Reminder reminder) {
         if (reminder != null) {
