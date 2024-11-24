@@ -11,22 +11,26 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
-    private TaskManager taskManager = new TaskManager(); //
-    
+    private TaskManager taskManager;
+    private MainController mainController;
     @Override
     public void start(Stage primaryStage) throws Exception {
-        taskManager.load(); // Load tasks from file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medialab/views/MainLayout.fxml"));
         Parent root = loader.load();
 
         // Pass the TaskManager to the controller
-        MainController controller = loader.getController();
-        controller.setTaskManager(taskManager);
+        // Initialize singletons
+        mainController = new MainController();
+        taskManager = TaskManager.getInstance();
+        taskManager.load(); // Load tasks from file
 
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("Task Management System");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
+
     }
 
     @Override
