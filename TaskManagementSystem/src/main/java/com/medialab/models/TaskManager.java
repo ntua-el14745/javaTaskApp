@@ -12,13 +12,18 @@ import java.io.IOException;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class TaskManager {
+    private static TaskManager instance;
     private List<Task> tasks;
     private List<Reminder> reminders; 
     private List<String> categories = new ArrayList<>();
     private List<String> priorities = new ArrayList<>();
 
+    private static final String CATEGORIES_FILE = "categories.json";
     private static final String TASKS_FILE = "tasks.json";
     private static final String REMINDERS_FILE = "reminders.json";
+    private static final String PRIORITIES_FILE = "priorities.json";
+    private static final String DEFAULT_PRIORITY = "Default";
+
     private ObjectMapper objectMapper;
 
     public TaskManager() {
@@ -27,17 +32,30 @@ public class TaskManager {
         this.objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); 
         // System.out.println("Before loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
-        loadTasks();
-        loadReminders();
+        load();
         // System.out.println("After loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
     }
+
+      // Public method to get the single instance
+      public static TaskManager getInstance() {
+        if (instance == null) {
+            instance = new TaskManager();
+        }
+        return instance;
+    }
+
         public void save(){
             saveTasks();
             saveReminders();
+            saveCategories(); 
+            savePriorities(); 
+
         }   
         public void load(){
             loadTasks();
             loadReminders();
+            loadCategories(); 
+            loadPriorities(); 
         }   
         
 
@@ -67,7 +85,55 @@ public class TaskManager {
                 tasks = new ArrayList<>();
             }
         }
+          // Save Priorities to a JSON file
+
+          public void savePriorities() {
+            // System.out.println("Saving tasks: " + tasks);
+            try {
+                objectMapper.writeValue(new File(PRIORITIES_FILE), priorities);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     
+        // Load tasks from a JSON file
+        public void loadPriorities() {
+            try {
+                File file = new File(PRIORITIES_FILE);
+                if (file.exists() && file.length() > 0) { 
+                    priorities = objectMapper.readValue(file, new TypeReference<List<String>>() {});
+                } else {
+                    priorities = new ArrayList<>();
+                }
+                addDefaultPriorityIfMissing();
+            } catch (IOException e) {
+                e.printStackTrace();
+                priorities = new ArrayList<>();
+            }
+        }
+
+         // Save categories to JSON
+         public void saveCategories() {
+            try {
+                objectMapper.writeValue(new File(CATEGORIES_FILE), categories);
+            } catch (IOException e) {
+             e.printStackTrace();
+            }
+        }
+        // Load categories from JSON
+        public void loadCategories() {
+            try {
+                File file = new File(CATEGORIES_FILE);
+                if (file.exists() && file.length() > 0) {
+                    categories = objectMapper.readValue(file, new TypeReference<List<String>>() {});
+                } else {
+                    categories = new ArrayList<>();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                categories = new ArrayList<>();
+            }
+        }
         // Save reminders to a JSON file
         public void saveReminders() {
             try {
@@ -226,5 +292,65 @@ public class TaskManager {
 
     public List<String> getPriorities() {
         return priorities;
+    }
+     // Edit a category name
+     public void editCategory(String oldCategory, String newCategory) {
+        if (categories.contains(oldCategory) && !categories.contains(newCategory)) {
+            categories.remove(oldCategory);
+            categories.add(newCategory);
+
+            // Update tasks with the old category
+            for (Task task : tasks) {
+                if (task.getCategory().getName().equals(oldCategory)) {
+                    task.setCategory(new Category(newCategory));
+                }
+            }
+            save(); // Save changes
+        }
+    }
+
+    // Delete a category and its associated tasks
+    public void deleteCategory(String category) {
+        if (categories.remove(category)) {
+            // Remove tasks associated with this category
+            tasks = tasks.stream()
+                         .filter(task -> !task.getCategory().getName().equals(category))
+                         .collect(Collectors.toList());
+            save(); // Save changes
+        }
+    }
+     // Edit a priority name
+     public void editPriority(String oldPriority, String newPriority) {
+        if (priorities.contains(oldPriority) && !priorities.contains(newPriority)) {
+            priorities.remove(oldPriority);
+            priorities.add(newPriority);
+
+            // Update tasks with the old priority
+            for (Task task : tasks) {
+                if (task.getPriority().getName().equals(oldPriority)) {
+                    task.setPriority(new Priority(newPriority));
+                }
+            }
+            save(); // Save changes
+        }
+    }
+
+    // Delete a priority and its associated tasks
+    public void deletePriority(String priority) {
+        if (priorities.remove(priority)) {
+            // Update tasks with the deleted priority to the default priority
+            for (Task task : tasks) {
+                if (task.getPriority().getName().equals(priority)) {
+                    task.setPriority(new Priority(DEFAULT_PRIORITY));
+                }
+            }
+            save(); // Save changes
+        }
+    }
+
+    public void addDefaultPriorityIfMissing() {
+        if (!priorities.contains(DEFAULT_PRIORITY)) {
+            priorities.add(DEFAULT_PRIORITY);
+        }
     }
 }
