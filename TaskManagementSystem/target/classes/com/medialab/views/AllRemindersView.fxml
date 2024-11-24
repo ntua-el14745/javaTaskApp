@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.AllRemindersController" alignment="CENTER" style="-fx-background-color: #f5f5f5; -fx-padding: 20px;">
+    <!-- Title -->
+    <Label text="Active Reminders" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <!-- Reminders Table -->
+    <TableView fx:id="remindersTable" prefHeight="300" style="-fx-pref-width: 100%; -fx-font-size: 14px;">
+        <columns>
+            <TableColumn fx:id="taskColumn" text="Task" prefWidth="200" style="-fx-font-size: 14px;" />
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="150" style="-fx-font-size: 14px;" />
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" style="-fx-font-size: 14px;" />
+        </columns>
+    </TableView>
+
+    <!-- Back Button -->
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Back" onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
+    </HBox>
+</VBox>
