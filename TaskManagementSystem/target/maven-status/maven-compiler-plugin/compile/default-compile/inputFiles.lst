@@ -1,8 +1,16 @@
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/TaskController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/MainController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/Reminder.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/Task.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/TaskStatus.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/BaseController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/TaskManager.java
-/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/MainApp.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/AddCategoryController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/Priority.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/CreateTaskController.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/PrioritiesController.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/AddPriorityController.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/MainApp.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/AddTaskController.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/CategoryController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/Category.java
