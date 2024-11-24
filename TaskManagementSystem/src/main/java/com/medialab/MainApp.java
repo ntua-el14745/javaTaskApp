@@ -23,6 +23,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+
 public class MainApp extends Application {
     private TaskManager taskManager;
     // private MainController mainController;
@@ -47,7 +48,7 @@ public class MainApp extends Application {
         primaryStage.setMinWidth(1200);
         primaryStage.setMinHeight(800);
         showDelayedTasksPopup();
-
+        taskManager.initializeReminderChecker();
     }
 
     @Override
