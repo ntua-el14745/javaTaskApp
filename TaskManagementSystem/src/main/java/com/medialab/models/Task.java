@@ -15,6 +15,7 @@ import java.util.List;
 public class Task {
     // private String title;
     // private String description;
+    private String id;
     private Category category;
     private Priority priority;
     private LocalDate deadline;
@@ -42,6 +43,12 @@ public class Task {
     }
     public StringProperty getTitleProp() {
         return title;
+    }
+    public String getId(){
+        return id;
+    }
+    public void setId(String id){
+        this.id = id;
     }
     public StringProperty getDescriptionProp() {
         return description;
@@ -108,6 +115,7 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
+                "id='" + id +'\'' +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
