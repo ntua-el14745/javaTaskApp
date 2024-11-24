@@ -1,6 +1,7 @@
 package com.medialab.controllers;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.medialab.models.Category;
 import com.medialab.models.Priority;
@@ -33,21 +34,36 @@ public class CreateTaskController {
     private DatePicker deadlinePicker;
 
      @FXML
-    private ComboBox<Category> categoryBox;
+    private ComboBox<String> categoryBox;
 
     @FXML
-    private ComboBox<Priority> priorityBox;
+    private ComboBox<String> priorityBox;
 
+       private TaskManager taskManager;
+
+    // Initialize method to populate ComboBoxes
+    @FXML
+    public void initialize() {
+        taskManager = TaskManager.getInstance();
+        
+        // Retrieve and populate categories in the ComboBox
+        List<String> categories = taskManager.getCategories();  // Assuming getCategories() returns a list of categories
+        categoryBox.getItems().setAll(categories);
+
+        // Retrieve and populate priorities in the ComboBox
+        List<String> priorities = taskManager.getPriorities();  // Assuming getPriorities() returns a list of priorities
+        priorityBox.getItems().setAll(priorities);
+    }
 
     @FXML
     private void createTask() {
         String title = titleField.getText();
         String description = descriptionField.getText();
-        Category category = categoryBox.getValue();
-        Priority priority = priorityBox.getValue();
+        Category category = new Category(categoryBox.getValue());
+        Priority priority = new Priority(priorityBox.getValue());
         LocalDate deadline = deadlinePicker.getValue();
 
-        if (title == null || title.isEmpty() || category == null || priority == null || deadline == null) {
+        if (title == null || title.isEmpty() || category == null || category.getName().isEmpty() || priority == null || priority.getName().isEmpty() || deadline == null) {
             showAlert("Error", "Please fill all fields!", Alert.AlertType.ERROR);
             return;
         }
