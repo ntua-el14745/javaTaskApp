@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+
+<VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.CreateTaskController">
+    <TextField fx:id="titleField" promptText="Title" />
+    <TextArea fx:id="descriptionField" promptText="Description" />
+    <!-- <TextField fx:id="categoryField" promptText="Category" /> -->
+    <!-- <TextField fx:id="priorityField" promptText="Priority" /> -->
+    <ComboBox fx:id="categoryBox" promptText="Select Category" />
+    <ComboBox fx:id="priorityBox" promptText="Select Priority" />
+    <!-- <TextField fx:id="statusField" promptText="Status" /> -->
+    <DatePicker fx:id="deadlinePicker" />
+    <Button text="Create Task" onAction="#createTask" />
+    <Button text="Cancel" onAction="#goBack" />
+</VBox>
