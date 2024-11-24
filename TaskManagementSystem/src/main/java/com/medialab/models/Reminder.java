@@ -8,16 +8,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Reminder {
     private String message;
     private LocalDate reminderDate;
-    private Task relatedTask;
+    private String relatedTaskID;
     private ReminderType reminderType;
 
     @JsonCreator
     public Reminder(@JsonProperty("reminderDate") LocalDate reminderDate,
-                    @JsonProperty("relatedTask") Task relatedTask,
+                    @JsonProperty("relatedTask") String relatedTaskID,
                     @JsonProperty("reminderType") ReminderType reminderType,
                     @JsonProperty("message") String message) {
         this.reminderDate = reminderDate;
-        this.relatedTask = relatedTask;
+        this.relatedTaskID = relatedTaskID;
         this.reminderType = reminderType;
         this.message = message;
     }
@@ -30,12 +30,12 @@ public class Reminder {
         this.reminderDate = reminderDate;
     }
 
-    public Task getRelatedTask() {
-        return relatedTask;
+    public String getRelatedTask() {
+        return relatedTaskID;
     }
 
-    public void setRelatedTask(Task relatedTask) {
-        this.relatedTask = relatedTask;
+    public void setRelatedTask(String relatedTask) {
+        this.relatedTaskID = relatedTask;
     }
 
     public ReminderType getReminderType() {
@@ -60,20 +60,20 @@ public class Reminder {
         if (obj == null || getClass() != obj.getClass()) return false;
         Reminder reminder = (Reminder) obj;
         return Objects.equals(reminderDate, reminder.reminderDate) &&
-                Objects.equals(relatedTask, reminder.relatedTask) &&
+                Objects.equals(relatedTaskID, reminder.relatedTaskID) &&
                 reminderType == reminder.reminderType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reminderDate, relatedTask, reminderType);
+        return Objects.hash(reminderDate, relatedTaskID, reminderType);
     }
 
     @Override
     public String toString() {
         return "Reminder{" +
                 "reminderDate=" + reminderDate +
-                ", relatedTask=" + relatedTask.getTitle() +
+                ", relatedTask=" + relatedTaskID +
                 ", reminderType=" + reminderType +
                 ", message='" + message + '\'' +
                 '}';
