@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.EditTaskController" style="-fx-background-color: #f5f5f5; -fx-padding: 20px;">
+    <!-- Title Section -->
+    <Label text="Edit Task" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <!-- Title Field -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Title:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <TextField fx:id="titleField" promptText="Enter Task Title" style="-fx-font-size: 14px; -fx-pref-width: 300px;" />
+    </HBox>
+
+    <!-- Description Field -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Description:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <TextArea fx:id="descriptionField" promptText="Enter Task Description" wrapText="true" style="-fx-font-size: 14px; -fx-pref-width: 300px; -fx-pref-height: 100px;" />
+    </HBox>
+
+    <!-- Category Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Category:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <ComboBox fx:id="categoryComboBox" promptText="Select Category" style="-fx-font-size: 14px; -fx-pref-width: 300px;" />
+    </HBox>
+
+    <!-- Priority Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Priority:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <ComboBox fx:id="priorityComboBox" promptText="Select Priority" style="-fx-font-size: 14px; -fx-pref-width: 300px;" />
+    </HBox>
+
+    <!-- Deadline Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Deadline:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <DatePicker fx:id="deadlinePicker" style="-fx-font-size: 14px; -fx-pref-width: 300px;" />
+    </HBox>
+
+    <!-- Buttons Section -->
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Save" onAction="#handleSave" style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
+        <Button text="Cancel" onAction="#handleCancel" style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
+    </HBox>
+</VBox>
