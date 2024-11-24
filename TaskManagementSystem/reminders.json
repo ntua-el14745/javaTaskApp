@@ -1,1 +1,21 @@
-[{"reminderDate":[2024,12,14],"relatedTask":"8266ac9e-6e40-4c03-b200-a9983d4f6d01","reminderType":"ONE_DAY_BEFORE","message":"Reminder for Task 1"},{"reminderDate":[2024,12,14],"relatedTask":"8266ac9e-6e40-4c03-b200-a9983d4f6d01","reminderType":"ONE_DAY_BEFORE","message":"Default Reminder Message"}]
+[ {
+  "reminderDate" : [ 2024, 12, 14 ],
+  "relatedTask" : "8266ac9e-6e40-4c03-b200-a9983d4f6d01",
+  "reminderType" : "ONE_DAY_BEFORE",
+  "message" : "Reminder for Task 1"
+}, {
+  "reminderDate" : [ 2024, 12, 14 ],
+  "relatedTask" : "8266ac9e-6e40-4c03-b200-a9983d4f6d01",
+  "reminderType" : "ONE_DAY_BEFORE",
+  "message" : "Default Reminder Message"
+}, {
+  "reminderDate" : [ 2024, 11, 30 ],
+  "relatedTask" : "8266ac9e-6e40-4c03-b200-a9983d4f6d01",
+  "reminderType" : "SPECIFIC_DATE",
+  "message" : "Default Reminder Message"
+}, {
+  "reminderDate" : [ 2024, 12, 29 ],
+  "relatedTask" : "627feba5-162c-4429-bdec-9eb415c3866c",
+  "reminderType" : "ONE_DAY_BEFORE",
+  "message" : "Default Reminder Message"
+} ]

@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-// import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class TaskManager {
         this.reminders = new ArrayList<>();
         this.objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); 
-        // objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         // System.out.println("Before loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
         load();
         // System.out.println("After loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
