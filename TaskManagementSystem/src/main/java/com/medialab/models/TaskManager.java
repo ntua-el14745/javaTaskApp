@@ -4,57 +4,80 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import java.io.File;
 import java.io.IOException;
-// import java.nio.file.Files;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+/**
+ * Singleton class for managing tasks, reminders, categories, and priorities.
+ * Provides methods for adding, updating, deleting, and retrieving tasks and reminders,
+ * as well as saving and loading data to/from JSON files.
+ */
 public class TaskManager {
+    // Singleton instance of TaskManager
     private static TaskManager instance;
     private List<Task> tasks;
     private List<Reminder> reminders; 
     private List<String> categories = new ArrayList<>();
     private List<String> priorities = new ArrayList<>();
 
-    private static final String CATEGORIES_FILE = "categories.json";
-    private static final String TASKS_FILE = "tasks.json";
-    private static final String REMINDERS_FILE = "reminders.json";
-    private static final String PRIORITIES_FILE = "priorities.json";
+    // File paths for JSON persistence
+    private static final String CATEGORIES_FILE = "medialab/categories.json";
+    private static final String TASKS_FILE = "medialab/tasks.json";
+    private static final String REMINDERS_FILE = "medialab/reminders.json";
+    private static final String PRIORITIES_FILE = "medialab/priorities.json";
+
+    // Default priority value
     private static final String DEFAULT_PRIORITY = "Default";
 
     private ObjectMapper objectMapper;
-
+     /**
+     * Private constructor to initialize TaskManager as a singleton.
+     * Loads existing data from JSON files or initializes empty collections if files do not exist.
+     */
     public TaskManager() {
         this.tasks = new ArrayList<>();
         this.reminders = new ArrayList<>();
         this.objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); 
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        // System.out.println("Before loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
         load();
-        // System.out.println("After loading: Tasks size: " + tasks.size() + ", Reminders size: " + reminders.size());
     }
 
-      // Public method to get the single instance
+     /**
+     * Retrieves the singleton instance of TaskManager.
+     * If the instance does not exist, it initializes a new one.
+     *
+     * @return The singleton instance of TaskManager.
+     */
       public static TaskManager getInstance() {
         if (instance == null) {
             instance = new TaskManager();
         }
         return instance;
     }
-
+        /**
+         * Calls All the Save methods, for Tasks, Reminders, Categories and Priorities.
+         * Used in order to save the state of the App on exit
+         */
         public void save(){
             saveTasks();
             saveReminders();
             saveCategories(); 
             savePriorities(); 
 
-        }   
+        }
+        /**
+         * Calls All the Load methods, for Tasks, Reminders, Categories and Priorities.
+         * Used in order to Load the last state of the App on start
+         */
         public void load(){
             loadTasks();
             loadReminders();
@@ -62,20 +85,20 @@ public class TaskManager {
             loadPriorities(); 
         }   
         
-
-
-        // Save tasks to a JSON file
-
+        /**
+         * Saves all Tasks to a JSON file for persistence.
+         */
         public void saveTasks() {
-            // System.out.println("Saving tasks: " + tasks);
             try {
                 objectMapper.writeValue(new File(TASKS_FILE), tasks);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    
-        // Load tasks from a JSON file
+        
+        /**
+         * Loads all Tasks from a JSON file. If the file does not exist, initializes an empty list.
+         */
         public void loadTasks() {
             try {
                 File file = new File(TASKS_FILE);
@@ -89,10 +112,11 @@ public class TaskManager {
                 tasks = new ArrayList<>();
             }
         }
-          // Save Priorities to a JSON file
 
+        /**
+         * Saves all Priorities to a JSON file for persistence.
+         */
           public void savePriorities() {
-            // System.out.println("Saving tasks: " + tasks);
             try {
                 objectMapper.writeValue(new File(PRIORITIES_FILE), priorities);
             } catch (IOException e) {
@@ -100,7 +124,9 @@ public class TaskManager {
             }
         }
     
-        // Load tasks from a JSON file
+        /**
+         * Loads all Priorities from a JSON file. If the file does not exist, initializes an empty list.
+         */
         public void loadPriorities() {
             try {
                 File file = new File(PRIORITIES_FILE);
@@ -116,7 +142,9 @@ public class TaskManager {
             }
         }
 
-         // Save categories to JSON
+         /**
+           * Saves all Categories to a JSON file for persistence.
+           */
          public void saveCategories() {
             try {
                 objectMapper.writeValue(new File(CATEGORIES_FILE), categories);
@@ -124,7 +152,10 @@ public class TaskManager {
              e.printStackTrace();
             }
         }
-        // Load categories from JSON
+
+         /**
+         * Loads all Categories from a JSON file. If the file does not exist, initializes an empty list.
+         */
         public void loadCategories() {
             try {
                 File file = new File(CATEGORIES_FILE);
@@ -138,19 +169,22 @@ public class TaskManager {
                 categories = new ArrayList<>();
             }
         }
-        // Save reminders to a JSON file
+
+        /**
+           * Saves all Reminders to a JSON file for persistence.
+           */
         public void saveReminders() {
             try {
-                // System.out.println("inside savereminders to task " + reminders);
                 objectMapper.writeValue(new File(REMINDERS_FILE), reminders);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    
-        // Load reminders from a JSON file
+
+        /**
+         * Loads all Reminders from a JSON file. If the file does not exist, initializes an empty list.
+         */
         public void loadReminders() {
-            // System.out.println("Loading reminders from file...");
             try {
                 File file = new File(REMINDERS_FILE);
                 if (file.exists() && file.length() > 0) { 
@@ -172,215 +206,346 @@ public class TaskManager {
             }
         }
     
-    // Add a new task
-    public void addTask(Task task) {
-        if (task.getId() == null || task.getId().isEmpty()) {
-        task.setId(UUID.randomUUID().toString());
-        }
-        tasks.add(task);
-    }
-
-    // Remove a task
-    public void deleteTask(Task task) {
-        tasks.remove(task);
-        // Remove all reminders related to this task
-        reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
-    }
-
-    // Update a task's status or any other attribute
-    public void updateTask(Task task, String title, String description, Priority priority, LocalDate dueDate) {
-        task.setTitle(title);
-        task.setDescription(description);
-        task.setPriority(priority);
-        task.setDeadline(dueDate);
-    }
-
-
-    // Get all tasks
-    public List<Task> getAllTasks() {
-        return tasks;
-    }
-
-    // Get tasks by a specific status
-    public List<Task> getTasksByStatus(TaskStatus status) {
-        return tasks.stream()
-                .filter(task -> task.getStatus() == status)
-                .collect(Collectors.toList());
-    }
-
-    // Get tasks by category
-    public List<Task> getTasksByCategory(String categoryName) {
-        List<Task> result = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.getCategory().getName().equalsIgnoreCase(categoryName)) {
-                result.add(task);
+        /**
+         * Adds a new task to the task list. Generates a unique ID for the task if it is not already set.
+         *
+         * @param task The task to be added. Must not be null.
+         */
+        public void addTask(Task task) {
+            if (task.getId() == null || task.getId().isEmpty()) {
+            task.setId(UUID.randomUUID().toString());
             }
+            tasks.add(task);
         }
-        return result;
-    }
-    public Task getTaskById(String id) {
-        return tasks.stream()
-                    .filter(task -> task.getId().equals(id))
+
+        /**
+         * Removes a task from the task list and deletes all reminders associated with it.
+         *
+         * @param task The task to be removed. Must not be null.
+         */
+        public void deleteTask(Task task) {
+            tasks.remove(task);
+            // Remove all reminders related to this task
+            reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
+        }
+
+        /**
+         * Updates the properties of an existing task.
+         *
+         * @param task        The task to be updated. Must not be null.
+         * @param title       The updated title of the task. Must not be null or empty.
+         * @param description The updated description of the task. Can be null.
+         * @param priority    The updated priority of the task. Must not be null.
+         * @param dueDate     The updated due date of the task. Must not be null.
+         */
+        public void updateTask(Task task, String title, String description, Priority priority, LocalDate dueDate) {
+            task.setTitle(title);
+            task.setDescription(description);
+            task.setPriority(priority);
+            task.setDeadline(dueDate);
+        }
+
+
+          /**
+         * Retrieves a list of all tasks managed by TaskManager.
+         *
+         * @return A list of all tasks.
+         */
+        public List<Task> getAllTasks() {
+            return tasks;
+        }
+
+         /**
+         * Retrieves tasks with a specific status.
+         *
+         * @param status The status to filter tasks by. Must not be null.
+         * @return A list of tasks with the specified status.
+         */
+        public List<Task> getTasksByStatus(TaskStatus status) {
+            return tasks.stream()
+                    .filter(task -> task.getStatus() == status)
+                    .collect(Collectors.toList());
+        }
+
+         /**
+         * Retrieves a list of all tasks related to a specific category.
+         *
+         * @param categoryName The category in which the tasks must belong to.
+         * @return A list of Task Objects.
+         */
+        public List<Task> getTasksByCategory(String categoryName) {
+            List<Task> result = new ArrayList<>();
+            for (Task task : tasks) {
+                if (task.getCategory().getName().equalsIgnoreCase(categoryName)) {
+                    result.add(task);
+                }
+            }
+            return result;
+        }
+
+         /**
+         * Retrieves a task with a specific id if found.
+         *
+         * @param id The id of the task to be retrieved.
+         * @return a Task object.
+         */
+        public Task getTaskById(String id) {
+            return tasks.stream()
+                        .filter(task -> task.getId().equals(id))
+                        .findFirst()
+                        .orElse(null);
+        }
+
+        /**
+         * Retrieves a list of all tasks related to a specific priority.
+         *
+         * @param priority The priority ithat the tasks must have.
+         * @return A list of Task objects.
+         */
+        public List<Task> getTasksByPriority(Priority priority) {
+            return tasks.stream()
+                    .filter(task -> task.getPriority() == priority)
+                    .collect(Collectors.toList());
+        }
+
+       
+         /**
+         * Retrieves a task with a specific title if found.
+         *
+         * @param title The title of the task to be retrieved.
+         * @return a Task object.
+         */
+        public Task getTaskByTitle(String title) {
+            return tasks.stream()
+                    .filter(task -> task.getTitle().equalsIgnoreCase(title))
                     .findFirst()
                     .orElse(null);
-    }
-    
-    // Get tasks by priority
-    public List<Task> getTasksByPriority(Priority priority) {
-        return tasks.stream()
-                .filter(task -> task.getPriority() == priority)
-                .collect(Collectors.toList());
-    }
-
-    // Get tasks with upcoming reminders
-    public List<Task> getTasksWithUpcomingReminders() {
-        return tasks.stream()
-                .filter(task -> task.getReminders().stream()
-                        .anyMatch(reminder -> reminder.getReminderDate().isAfter(LocalDate.now())))
-                .collect(Collectors.toList());
-    }
-
-    // Get task by title
-    public Task getTaskByTitle(String title) {
-        return tasks.stream()
-                .filter(task -> task.getTitle().equalsIgnoreCase(title))
-                .findFirst()
-                .orElse(null);
-    }
-
-    // Display all tasks (for testing purposes)
-    public void displayAllTasks() {
-        tasks.forEach(task -> System.out.println(task));
-    }
-
-    public void markTaskAsCompleted(Task task) {
-        task.setStatus(TaskStatus.COMPLETED);
-    
-        // Remove associated reminders
-        reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
-        saveReminders(); // Save changes to reminders
-    }
-    // Method to update task priority
-    public void updateTaskPriority(Task task, Priority newPriority) {
-        task.setPriority(newPriority);
-    }
-
-    // Method to add a reminder to a task
-    public void addReminderToTask(Task task, Reminder reminder) {
-        task.addReminder(reminder);
-        reminder.setRelatedTask(task.getId());
-        reminders.add(reminder);
-    }
-
-    // Method to remove a reminder from a task
-    public void removeReminderFromTask(Reminder reminder) {
-        reminders.remove(reminder);
-    }
-
-      // Method to get all reminders for a task
-      public List<Reminder> getRemindersForTask(Task task) {
-        return reminders.stream()
-                .filter(reminder -> reminder.getRelatedTask().equals(task.getId()))
-                .collect(Collectors.toList());
-    }
-
-    // Method to get all reminders
-    public List<Reminder> getAllReminders() {
-        return reminders;
-    }
-
-    public void addCategory(String category) {
-        if (!categories.contains(category)) {
-            categories.add(category);
         }
-    }
 
-    public void addPriority(String priority) {
-        if (!priorities.contains(priority)) {
-            priorities.add(priority);
+        
+        /**
+         * Marks a task as completed and removes its associated reminders.
+         *
+         * @param task The task to be marked as completed. Must not be null.
+         */
+        public void markTaskAsCompleted(Task task) {
+            task.setStatus(TaskStatus.COMPLETED);
+        
+            // Remove associated reminders
+            reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
+            saveReminders(); // Save changes to reminders
         }
-    }
+        
+         /**
+         * Adds a reminder to a task and associates it with the task ID.
+         *
+         * @param task     The task to which the reminder is added. Must not be null.
+         * @param reminder The reminder to be added. Must not be null.
+         */
+        public void addReminderToTask(Task task, Reminder reminder) {
+            task.addReminder(reminder);
+            reminder.setRelatedTask(task.getId());
+            reminder.setId(UUID.randomUUID().toString());
+            reminders.add(reminder);
+        }
 
-    public List<String> getCategories() {
-        return categories;
-    }
+         /**
+         * Removes a reminder from a task.
+         *
+         * @param reminder The reminder to be removed. Must not be null.
+         */
+        public void removeReminderFromTask(Reminder reminder) {
+            reminders.remove(reminder);
+        }
 
-    public List<String> getPriorities() {
-        return priorities;
-    }
-     // Edit a category name
-     public void editCategory(String oldCategory, String newCategory) {
-        if (categories.contains(oldCategory) && !categories.contains(newCategory)) {
-            categories.remove(oldCategory);
-            categories.add(newCategory);
+          /**
+          * Retrieves all reminders associated with a task.
+          *
+          * @param task The task for which reminders are retrieved. Must not be null.
+          * @return A list of reminders associated with the task.
+          */
+          public List<Reminder> getRemindersForTask(Task task) {
+            return reminders.stream()
+                    .filter(reminder -> reminder.getRelatedTask().equals(task.getId()))
+                    .collect(Collectors.toList());
+        }
 
-            // Update tasks with the old category
-            for (Task task : tasks) {
-                if (task.getCategory().getName().equals(oldCategory)) {
-                    task.setCategory(new Category(newCategory));
+         /**
+          * Retrieves all reminders.
+          *
+          * @param task The task for which reminders are retrieved. Must not be null.
+          * @return A list of reminders.
+          */
+        public List<Reminder> getAllReminders() {
+            return reminders;
+        }
+
+        /**
+          * Add a new category.
+          *
+          * @param category The category to add.
+          */
+        public void addCategory(String category) {
+            if (!categories.contains(category)) {
+                categories.add(category);
+            }
+        }
+
+        /**
+          * Add a new priority.
+          *
+          * @param priority The priority to add.
+          */
+        public void addPriority(String priority) {
+            if (!priorities.contains(priority)) {
+                priorities.add(priority);
+            }
+        }
+
+        /**
+          * Retrieves all categories.
+          *
+          * @return A list of categories.
+          */
+        public List<String> getCategories() {
+            return categories;
+        }
+
+        /**
+          * Retrieves all priorities.
+          *
+          * @return A list of priorities.
+          */
+        public List<String> getPriorities() {
+            return priorities;
+        }
+
+         /**
+          * Edits a category name and updates tasks that belonged to this category, with the new name.
+          *
+          * @param oldCategory The old category name.
+          * @param newCategory The new category name.
+          */
+         public void editCategory(String oldCategory, String newCategory) {
+            if (categories.contains(oldCategory) && !categories.contains(newCategory)) {
+                categories.remove(oldCategory);
+                categories.add(newCategory);
+
+                // Update tasks with the old category
+                for (Task task : tasks) {
+                    if (task.getCategory().getName().equals(oldCategory)) {
+                        task.setCategory(new Category(newCategory));
+                    }
                 }
             }
-            save(); // Save changes
         }
-    }
 
-    // Delete a category and its associated tasks
-    public void deleteCategory(String category) {
-        if (categories.remove(category)) {
-            // Remove tasks associated with this category
-            tasks = tasks.stream()
-                         .filter(task -> !task.getCategory().getName().equals(category))
-                         .collect(Collectors.toList());
-            save(); // Save changes
+        /**
+          * Deletes a category and its associated tasks.
+          *
+          * @param category The category to be deleted.
+          */
+        public void deleteCategory(String category) {
+            if (categories.remove(category)) {
+                // Remove tasks associated with this category
+                tasks = tasks.stream()
+                             .filter(task -> !task.getCategory().getName().equals(category))
+                             .collect(Collectors.toList());
+            }
         }
-    }
-     // Edit a priority name
-     public void editPriority(String oldPriority, String newPriority) {
-        if (priorities.contains(oldPriority) && !priorities.contains(newPriority)) {
-            priorities.remove(oldPriority);
-            priorities.add(newPriority);
+         
+         /**
+          * Edits a priority name and updates tasks that had this priority, with the new name.
+          *
+          * @param oldPriority The old priority name.
+          * @param newPriority The new priority name.
+          */
+         public void editPriority(String oldPriority, String newPriority) {
+            if (priorities.contains(oldPriority) && !priorities.contains(newPriority)) {
+                priorities.remove(oldPriority);
+                priorities.add(newPriority);
 
-            // Update tasks with the old priority
-            for (Task task : tasks) {
-                if (task.getPriority().getName().equals(oldPriority)) {
-                    task.setPriority(new Priority(newPriority));
+                // Update tasks with the old priority
+                for (Task task : tasks) {
+                    if (task.getPriority().getName().equals(oldPriority)) {
+                        task.setPriority(new Priority(newPriority));
+                    }
                 }
             }
-            save(); // Save changes
         }
-    }
 
-    // Delete a priority and its associated tasks
-    public void deletePriority(String priority) {
-        if (priorities.remove(priority)) {
-            // Update tasks with the deleted priority to the default priority
-            for (Task task : tasks) {
-                if (task.getPriority().getName().equals(priority)) {
-                    task.setPriority(new Priority(DEFAULT_PRIORITY));
+          /**
+          * Deletes a priority and changes its associated tasks priority to default.
+          *
+          * @param priority The priority to be deleted.
+          */
+        public void deletePriority(String priority) {
+            if (priorities.remove(priority)) {
+                // Update tasks with the deleted priority to the default priority
+                for (Task task : tasks) {
+                    if (task.getPriority().getName().equals(priority)) {
+                        task.setPriority(new Priority(DEFAULT_PRIORITY));
+                    }
                 }
             }
-            save(); // Save changes
         }
-    }
 
-    public void addDefaultPriorityIfMissing() {
-        if (!priorities.contains(DEFAULT_PRIORITY)) {
-            priorities.add(DEFAULT_PRIORITY);
-        }
-    }
-
-
-
-    
-    public void checkDelayedTasks() {
-        LocalDate currentDate = LocalDate.now();
-    
-        for (Task task : tasks) {
-            if (task.getStatus() != TaskStatus.COMPLETED && task.getDeadline().isBefore(currentDate)) {
-                task.setStatus(TaskStatus.DELAYED); // Set task status to DELAYED
+        /**
+          * Checks if the default priority is defined, if not it adds it in the priorities.
+          *
+          */
+        public void addDefaultPriorityIfMissing() {
+            if (!priorities.contains(DEFAULT_PRIORITY)) {
+                priorities.add(DEFAULT_PRIORITY);
             }
         }
-        saveTasks(); // Save the tasks after updating statuses
-    }
 
+        /**
+          * Checks for tasks that are delayed and if it finds any, updates their status.
+          *
+          */
+        public void checkDelayedTasks() {
+            LocalDate currentDate = LocalDate.now();
+        
+            for (Task task : tasks) {
+                if (task.getStatus() != TaskStatus.COMPLETED && task.getDeadline().isBefore(currentDate)) {
+                    task.setStatus(TaskStatus.DELAYED); // Set task status to DELAYED
+                }
+            }
+        }
+
+        /**
+          * Checks for reminders that have to be displayed.
+          *
+          */
+        public void initializeReminderChecker() {
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+            scheduler.scheduleAtFixedRate(() -> {
+                LocalDate currentDate = LocalDate.now();
+                List<Reminder> dueReminders = reminders.stream()
+                    .filter(reminder -> reminder.getReminderDate().isBefore(currentDate) &&
+                                        !reminder.isNotified()) // Avoid notifying more than once
+                    .collect(Collectors.toList());
+
+                for (Reminder reminder : dueReminders) {
+                    Task relatedTask = getTaskById(reminder.getRelatedTask());
+                    String taskTitle = relatedTask != null ? relatedTask.getTitle() : "No related task";
+
+                    System.out.println("Reminder: " + taskTitle + " is due at " + reminder.getReminderDate());
+
+                    // Mark as notified to prevent duplicate notifications
+                    reminder.setNotified(true);
+                }
+             
+             }, 0, 1, TimeUnit.DAYS); // Check every minute
+         }       
+         public void updateReminder(Reminder reminder) {
+            // Update the reminder in the list of reminders
+            reminders = reminders.stream()
+                .map(existingReminder -> existingReminder.getId().equals(reminder.getId()) ? reminder : existingReminder)
+                .collect(Collectors.toList());
+            saveReminders(); // Save the updated list of reminders to the file
+        }
+        
 }
