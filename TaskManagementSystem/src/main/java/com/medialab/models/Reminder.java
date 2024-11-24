@@ -10,7 +10,8 @@ public class Reminder {
     private LocalDate reminderDate;
     private String relatedTaskID;
     private ReminderType reminderType;
-
+    private boolean notified = false; 
+    private String id;
     @JsonCreator
     public Reminder(@JsonProperty("reminderDate") LocalDate reminderDate,
                     @JsonProperty("relatedTask") String relatedTaskID,
@@ -21,7 +22,21 @@ public class Reminder {
         this.reminderType = reminderType;
         this.message = message;
     }
+    // Getter and Setter for notified
+    public boolean isNotified() {
+        return notified;
+    }
 
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
+    }
     public LocalDate getReminderDate() {
         return reminderDate;
     }
@@ -86,4 +101,6 @@ public class Reminder {
         ONE_MONTH_BEFORE,
         SPECIFIC_DATE
     }
+
+    
 }
