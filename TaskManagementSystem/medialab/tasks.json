@@ -9,7 +9,7 @@
   },
   "deadline" : [ 2024, 12, 15 ],
   "id" : "8266ac9e-6e40-4c03-b200-a9983d4f6d01",
-  "status" : "OPEN",
+  "status" : "COMPLETED",
   "reminders" : [ {
     "reminderDate" : [ 2024, 12, 14 ],
     "relatedTask" : "8266ac9e-6e40-4c03-b200-a9983d4f6d01",
@@ -38,6 +38,13 @@
     "message" : "Default Reminder Message",
     "notified" : false,
     "id" : null
+  }, {
+    "reminderDate" : [ 2024, 11, 25 ],
+    "relatedTask" : "8266ac9e-6e40-4c03-b200-a9983d4f6d01",
+    "reminderType" : "SPECIFIC_DATE",
+    "message" : "Default Reminder Message",
+    "notified" : false,
+    "id" : "1352a8e2-d6a7-4ab5-b05a-c895c2d080dc"
   } ],
   "reminderDate" : [ 2024, 12, 14 ],
   "titleProp" : {
@@ -101,6 +108,13 @@
     "message" : "Default Reminder Message",
     "notified" : false,
     "id" : null
+  }, {
+    "reminderDate" : [ 2024, 11, 25 ],
+    "relatedTask" : "627feba5-162c-4429-bdec-9eb415c3866c",
+    "reminderType" : "SPECIFIC_DATE",
+    "message" : "Default Reminder Message",
+    "notified" : true,
+    "id" : "3cc576dc-cdfb-4657-afe8-d02e5004629c"
   } ],
   "reminderDate" : [ 2024, 12, 29 ],
   "titleProp" : {
@@ -129,8 +143,22 @@
   "deadline" : [ 2024, 12, 20 ],
   "id" : "60a1b769-7d92-4965-b638-2b0560038c44",
   "status" : "OPEN",
-  "reminders" : [ ],
-  "reminderDate" : null,
+  "reminders" : [ {
+    "reminderDate" : [ 2024, 11, 25 ],
+    "relatedTask" : "60a1b769-7d92-4965-b638-2b0560038c44",
+    "reminderType" : "SPECIFIC_DATE",
+    "message" : "Default Reminder Message",
+    "notified" : false,
+    "id" : "ff6a0e9f-7f19-4106-95de-8327fbf687c8"
+  }, {
+    "reminderDate" : [ 2024, 11, 25 ],
+    "relatedTask" : "60a1b769-7d92-4965-b638-2b0560038c44",
+    "reminderType" : "SPECIFIC_DATE",
+    "message" : "Default Reminder Message",
+    "notified" : true,
+    "id" : "95cab00b-54a3-4704-9b7d-c57c6a310d83"
+  } ],
+  "reminderDate" : [ 2024, 11, 25 ],
   "titleProp" : {
     "value" : "Task 2",
     "bean" : null,
