@@ -15,6 +15,17 @@ import java.io.File;
 import java.io.IOException;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 /**
  * Singleton class for managing tasks, reminders, categories, and priorities.
  * Provides methods for adding, updating, deleting, and retrieving tasks and reminders,
@@ -27,7 +38,8 @@ public class TaskManager {
     private List<Reminder> reminders; 
     private List<String> categories = new ArrayList<>();
     private List<String> priorities = new ArrayList<>();
-
+    // Scheduler instance
+    private ScheduledExecutorService scheduler;
     // File paths for JSON persistence
     private static final String CATEGORIES_FILE = "medialab/categories.json";
     private static final String TASKS_FILE = "medialab/tasks.json";
@@ -519,12 +531,12 @@ public class TaskManager {
           *
           */
         public void initializeReminderChecker() {
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler = Executors.newScheduledThreadPool(1);
 
             scheduler.scheduleAtFixedRate(() -> {
                 LocalDate currentDate = LocalDate.now();
                 List<Reminder> dueReminders = reminders.stream()
-                    .filter(reminder -> reminder.getReminderDate().isBefore(currentDate) &&
+                    .filter(reminder -> (reminder.getReminderDate().isBefore(currentDate) || reminder.getReminderDate().isEqual(currentDate))&&
                                         !reminder.isNotified()) // Avoid notifying more than once
                     .collect(Collectors.toList());
 
@@ -532,15 +544,37 @@ public class TaskManager {
                     Task relatedTask = getTaskById(reminder.getRelatedTask());
                     String taskTitle = relatedTask != null ? relatedTask.getTitle() : "No related task";
 
-                    System.out.println("Reminder: " + taskTitle + " is due at " + reminder.getReminderDate());
-
+                     Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Reminder Notification");
+                        alert.setHeaderText("Reminder Due!");
+                        alert.setContentText("Task: " + taskTitle + "\nDue Date: " + reminder.getReminderDate());
+                        alert.showAndWait();
+                    });
                     // Mark as notified to prevent duplicate notifications
                     reminder.setNotified(true);
                 }
              
-             }, 0, 1, TimeUnit.DAYS); // Check every minute
-         }       
-         public void updateReminder(Reminder reminder) {
+             }, 0, 1, TimeUnit.MINUTES); // Check every minute
+         }
+         
+          /**
+         * Shuts down the Scheduler that checks for Reminders.
+         * Used in order to shut down the thread on app exit.
+         *
+         * @param reminder The reminder to be updated.
+         */
+        public void shutdownReminderChecker() {
+            if (scheduler != null && !scheduler.isShutdown()) {
+                scheduler.shutdown();
+            }
+        }
+         /**
+         * Updates a reminder.
+         *
+         * @param reminder The reminder to be updated.
+         */
+        public void updateReminder(Reminder reminder) {
             // Update the reminder in the list of reminders
             reminders = reminders.stream()
                 .map(existingReminder -> existingReminder.getId().equals(reminder.getId()) ? reminder : existingReminder)
@@ -548,4 +582,59 @@ public class TaskManager {
             saveReminders(); // Save the updated list of reminders to the file
         }
         
+
+         /**
+         * Searches for tasks that are delayed
+         * and displays them in a pop up
+         *
+         */
+        public void showDelayedTasksPopup() {
+            // Create a ListView to display the delayed tasks
+            ListView<String> listView = new ListView<>();
+
+            // Get the delayed tasks
+            List<Task> delayedTasks = getAllTasks().stream()
+                                           .filter(task -> task.getStatus() == TaskStatus.DELAYED)
+                                           .collect(Collectors.toList());
+
+            // If there are delayed tasks, populate the ListView
+            if (!delayedTasks.isEmpty()) {
+                for (Task task : delayedTasks) {
+                    listView.getItems().add(task.getTitle() + " - " + task.getDeadline().toString());
+                }
+            } else {
+                return;
+                // listView.getItems().add("No delayed tasks.");
+            }
+        
+            // Create a new window (Stage)
+            Stage delayedTasksStage = new Stage();
+            delayedTasksStage.setTitle("Delayed Tasks");
+        
+            // Create a layout (VBox) for better organization and styling
+            VBox vbox = new VBox(15, 
+                new Label("Delayed Tasks"),  // Title label with styling
+                listView
+            );
+            vbox.setPadding(new Insets(20));  // Add padding around the VBox
+            vbox.setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #0078D4; -fx-border-width: 2px; -fx-border-radius: 10px;");  // Background color and border style
+            vbox.setSpacing(15);  // Space between the label and list
+            // Create a HBox to center the Close button
+            HBox buttonBox = new HBox();
+            buttonBox.setAlignment(javafx.geometry.Pos.CENTER);  // Center the button
+            Button closeButton = new Button("Close");
+            closeButton.setStyle("-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px;");
+            closeButton.setOnAction(event -> delayedTasksStage.close());
+            buttonBox.getChildren().add(closeButton);  // Add the close button to the HBox
+        
+            // Add the HBox (with the centered close button) to the VBox
+            vbox.getChildren().add(buttonBox);
+        
+            // Create a scene for the new window with the updated layout
+            Scene scene = new Scene(vbox, 400, 300);  // Adjust size as needed
+            delayedTasksStage.setScene(scene);
+        
+            // Show the stage (new window)
+            delayedTasksStage.show();
+        }       
 }
