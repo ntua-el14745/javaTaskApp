@@ -253,8 +253,11 @@ public class TaskController extends BaseController {
         statusDialog.showAndWait().ifPresent(selectedStatus -> {
             if (selectedStatus != task.getStatus()) {
                 // Update the task's status
-                task.setStatus(selectedStatus);
-                taskManager.saveTasks(); // Save changes to the TaskManager
+                if(selectedStatus == TaskStatus.COMPLETED){
+                    taskManager.markTaskAsCompleted(task);
+                }else{
+                    task.setStatus(selectedStatus);
+                }
                 loadTasksByCategory(); // Refresh the task list
                 showAlert(Alert.AlertType.INFORMATION, "Status Updated", "Task status successfully updated to: " + selectedStatus);
             } else {
