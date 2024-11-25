@@ -459,10 +459,16 @@ public class TaskManager {
           */
         public void deleteCategory(String category) {
             if (categories.remove(category)) {
-                // Remove tasks associated with this category
-                tasks = tasks.stream()
-                             .filter(task -> !task.getCategory().getName().equals(category))
-                             .collect(Collectors.toList());
+                // Collect tasks associated with this category
+                List<Task> tasksToDelete = tasks.stream()
+                .filter(task -> task.getCategory().getName().equals(category))
+                .collect(Collectors.toList());
+
+                // Delete each task using deleteTask()
+                for (Task task : tasksToDelete) {
+                deleteTask(task); // Ensure reminders are also removed
+                }
+
             }
         }
          
