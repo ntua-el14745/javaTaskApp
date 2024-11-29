@@ -1,18 +1,16 @@
 package com.medialab.controllers;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Arrays;
-// import java.time.LocalDate;
-import java.util.List;
 
 import com.medialab.models.Category;
 import com.medialab.models.Priority;
-// import com.medialab.models.Category;
-// import com.medialab.models.Priority;
 import com.medialab.models.Task;
 import com.medialab.models.TaskManager;
 import com.medialab.models.TaskStatus;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,11 +22,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
-// import javafx.scene.control.Alert;
-// import javafx.scene.control.ComboBox;
-// import javafx.scene.control.DatePicker;
-// import javafx.scene.control.TableView;
-// import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
@@ -38,11 +31,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.beans.property.SimpleStringProperty;
-// import javafx.beans.property.StringProperty;
 
 public class TaskController extends BaseController {
-    // @FXML
-    // private TableView taskTable;
 
     @FXML
     private TextField searchField;
@@ -109,6 +99,11 @@ public class TaskController extends BaseController {
             for (Task task : tasks) {
                 // Create a task node
                 TreeItem<Task> taskItem = new TreeItem<>(task);
+                // Add a custom cell factory for the status column to display user-friendly status names
+                statusColumn.setCellValueFactory(param -> {
+                    Task t = param.getValue().getValue();
+                    return new SimpleStringProperty(t.getStatus().getDisplayName());  // Use the getDisplayName() method from TaskStatus enum
+            });
                 categoryItem.getChildren().add(taskItem);
             }
 
@@ -126,13 +121,15 @@ public class TaskController extends BaseController {
             private final Button editButton = new Button("Edit Details");
             private final Button viewButton = new Button("View Details");
             private final Button updateStatusButton = new Button("Update Status");
-            private final Button deleteButton = new Button("Delete");
             private final Button addReminder = new Button("Add Reminder");
             private final Button viewRemindersButton = new Button("View Reminders");
+            private final Button deleteButton = new Button("Delete Task");
+
             {
                 editButton.setOnAction(event -> handleEditTask(getTableRow().getItem()));
                 viewButton.setOnAction(event -> handleViewTask(getTableRow().getItem()));
                 updateStatusButton.setOnAction(event -> handleUpdateStatus(getTableRow().getItem()));
+                deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10; -fx-alignment: CENTER;");
                 deleteButton.setOnAction(event -> handleDeleteTask(getTableRow().getItem()));
                 addReminder.setOnAction(event -> handleAddReminder(getTableRow().getItem()));
                 viewRemindersButton.setOnAction(event -> handleViewReminders(getTableRow().getItem()));
@@ -150,7 +147,7 @@ public class TaskController extends BaseController {
                     setGraphic(null);
 
                 } else {
-                    HBox actionButtons = new HBox(5, editButton, viewButton, updateStatusButton, deleteButton, addReminder, viewRemindersButton);
+                    HBox actionButtons = new HBox(5, editButton, viewButton, updateStatusButton, addReminder, viewRemindersButton, deleteButton);
                     setGraphic(actionButtons);
                 }
             }
