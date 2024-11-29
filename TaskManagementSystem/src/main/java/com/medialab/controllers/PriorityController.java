@@ -83,6 +83,10 @@ public class PriorityController extends BaseController{
     private void handleDeletePriority() {
         String selectedPriority = prioritiesListView.getSelectionModel().getSelectedItem();
         if (selectedPriority != null) {
+            if (selectedPriority.equals(TaskManager.DEFAULT_PRIORITY)) { // Check if it's the default priority
+            DialogUtils.showWarningDialog("Delete Error", "The Default priority cannot be deleted.");
+            return;
+            }
             boolean confirmed = DialogUtils.showConfirmationDialog(
                 "Delete Priority",
                 "Are you sure you want to delete the priority '" + selectedPriority + "'? This will change all associated tasks priority to Default."
