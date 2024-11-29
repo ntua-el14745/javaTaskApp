@@ -53,16 +53,14 @@ public class AllRemindersController extends BaseController {
             new SimpleStringProperty(param.getValue().getReminderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         );
 
-        // Reminder time column (assuming time is available)
-        // timeColumn.setCellValueFactory(param -> 
-        //     new SimpleStringProperty(param.getValue().getTime().format(DateTimeFormatter.ofPattern("HH:mm")))
-        // );
-
+    
         // Actions column (Delete button)
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
 
             {
+                // Style the delete button to appear red
+                deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10; -fx-alignment: CENTER;");
                 deleteButton.setOnAction(event -> handleDeleteReminder(getTableRow().getItem()));
             }
 
