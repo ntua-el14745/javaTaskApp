@@ -24,12 +24,7 @@ public class CreateTaskController {
     private TextField titleField;
     @FXML
     private TextArea descriptionField;
-    // @FXML
-    // private TextField categoryField;
-    // @FXML
-    // private TextField priorityField;
-    // @FXML
-    // private TextField statusField;
+  
     @FXML
     private DatePicker deadlinePicker;
 
@@ -47,11 +42,11 @@ public class CreateTaskController {
         taskManager = TaskManager.getInstance();
         
         // Retrieve and populate categories in the ComboBox
-        List<String> categories = taskManager.getCategories();  // Assuming getCategories() returns a list of categories
+        List<String> categories = taskManager.getCategories(); 
         categoryBox.getItems().setAll(categories);
 
         // Retrieve and populate priorities in the ComboBox
-        List<String> priorities = taskManager.getPriorities();  // Assuming getPriorities() returns a list of priorities
+        List<String> priorities = taskManager.getPriorities();  
         priorityBox.getItems().setAll(priorities);
     }
 
@@ -81,6 +76,9 @@ public class CreateTaskController {
         categoryBox.setValue(null);
         priorityBox.setValue(null);
         deadlinePicker.setValue(null);
+
+        // Now switch to "View All Tasks" scene after the task is created
+        switchScene("/com/medialab/views/TaskView.fxml"); 
     }
 
     private void showAlert(String title, String message, Alert.AlertType alertType) {
