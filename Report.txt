@@ -1,87 +1,87 @@
-### Αναφορά για τη Δομή και τον Σχεδιασμό της Υλοποίησης
+### Project Report: Task Management System
 
-#### 1. Γενική Περιγραφή Σχεδιασμού Υλοποίησης
+#### General Description
 
-Η εφαρμογή έχει σχεδιαστεί ως ένα σύστημα διαχείρισης εργασιών που βασίζεται στη Java και χρησιμοποιεί JSON αρχεία για την αποθήκευση δεδομένων. Το σύστημα αποτελείται από τις εξής βασικές οντότητες:
-- **Task**: Αντιπροσωπεύει μια εργασία που μπορεί να έχει τίτλο, περιγραφή, προθεσμία, προτεραιότητα, κατηγορία, κατάσταση και υπενθυμίσεις.
-- **Reminder**: Αντιπροσωπεύει υπενθυμίσεις που συνδέονται με συγκεκριμένες εργασίες.
-- **Category** και **Priority**: Διατηρούν προκαθορισμένες τιμές που χρησιμοποιούνται από τις εργασίες.
+The project aims to implement a Task Management System, designed to help users create, manage, and track tasks efficiently. The system allows users to add tasks, categorize them, set priorities, and define deadlines. In addition, users can view all tasks, filter tasks by category, and track the status of tasks such as "Open," "In Progress," "Completed," and "Delayed."
 
-Η εφαρμογή οργανώνεται γύρω από έναν βασικό ελεγκτή (`TaskManager`) που αναλαμβάνει τη διαχείριση όλων των δεδομένων και τη φόρτωσή τους από JSON αρχεία. Παράλληλα, υπάρχουν οπτικοποιημένοι ελεγκτές (JavaFX) που υποστηρίζουν την αλληλεπίδραση με τον χρήστη.
+The system is built using JavaFX, which provides an intuitive graphical user interface (GUI) for task management. The application features multiple views, such as a "Create Task" scene for adding new tasks, a "View All Tasks" scene for browsing existing tasks, and a "Reminders" feature that notifies users about upcoming tasks.
 
----
+The system also supports functionality for removing reminders and categorizing tasks into predefined categories. Additionally, users can filter tasks based on their status and categorize them by priority. The program leverages an Enum class to define task statuses and ensure that tasks are organized and displayed correctly.
 
-#### 2. Περιγραφή Δομής των JSON Αρχείων
+#### Design and Implementation
 
-##### **1. tasks.json**
-- Περιέχει όλες τις εργασίες που έχουν δημιουργηθεί από τον χρήστη.
-- Δομή:
-  ```json
-  [
+**1. User Interface (UI) Design:**
+
+The user interface of the system was designed with simplicity and ease of use in mind. The main components of the UI are:
+
+- **Task Creation Scene:** This scene allows users to input details such as task title, description, deadline, category, and priority. Upon completing this form, users can save the task to the system.
+- **Task View Scene:** In this scene, users can view a list of all tasks, with options to filter tasks by category and status. Tasks are displayed in a tree structure to represent different categories and their respective tasks.
+- **Statistics Bar:** A horizontal bar displaying key statistics such as the total number of tasks, completed tasks, and delayed tasks.
+- **Reminders:** A section where users can set up reminders for tasks and view upcoming deadlines.
+
+**2. Data Structure:**
+
+The application stores tasks and other relevant data in Java objects. The `Task` class holds the main task attributes such as the title, description, category, priority, deadline, and status. Additionally, an Enum class called `TaskStatus` defines the possible states of a task, such as `OPEN`, `IN_PROGRESS`, `COMPLETED`, `POSTPONED`, and `DELAYED`. This helps manage the workflow of tasks within the system and allows for easy updates on task progress.
+
+Data persistence is handled using a file-based approach, where tasks are saved to JSON files. Each task is serialized into a JSON object, and all tasks are saved to a central JSON file. Upon starting the application, the tasks are deserialized back into Java objects to load the current state of the task list.
+
+The JSON structure is organized in a way that reflects the hierarchical nature of the task categories. The main JSON file contains an array of task objects, each with attributes such as title, description, category, priority, status, and deadline. 
+
+**Sample JSON Structure:**
+
+```json
+{
+  "tasks": [
     {
-      "id": "unique-task-id",
-      "title": "Task Title",
-      "description": "Task Description",
-      "priority": { "name": "High" },
-      "category": { "name": "Work" },
-      "status": "PENDING",
-      "deadline": "2024-12-01",
-      "reminders": ["reminder-id-1", "reminder-id-2"]
+      "title": "Finish Homework",
+      "description": "Complete the physics assignment",
+      "category": "Education",
+      "priority": "High",
+      "status": "OPEN",
+      "deadline": "2024-12-05"
+    },
+    {
+      "title": "Buy Groceries",
+      "description": "Purchase vegetables and fruits",
+      "category": "Shopping",
+      "priority": "Low",
+      "status": "COMPLETED",
+      "deadline": "2024-11-28"
     }
   ]
-  ```
-- **Εξήγηση**:
-  - Το `id` είναι μοναδικό για κάθε εργασία.
-  - Οι προτεραιότητες (`priority`) και κατηγορίες (`category`) αναπαρίστανται ως αντικείμενα.
-  - Τα `reminders` περιέχουν λίστα των αναγνωριστικών υπενθυμίσεων που σχετίζονται με την εργασία.
+}
+```
 
-##### **2. reminders.json**
-- Περιέχει όλες τις υπενθυμίσεις που έχουν οριστεί.
-- Δομή:
-  ```json
-  [
-    {
-      "id": "unique-reminder-id",
-      "relatedTask": "task-id",
-      "reminderDate": "2024-11-30",
-      "reminderTime": "15:00"
-    }
-  ]
-  ```
-- **Εξήγηση**:
-  - Το `relatedTask` είναι το αναγνωριστικό της εργασίας που συνδέεται με την υπενθύμιση.
+In this structure:
+- Each task is represented as a JSON object.
+- Attributes such as `title`, `description`, `category`, `priority`, `status`, and `deadline` are stored as key-value pairs.
+- The array of tasks is encapsulated in a top-level object under the `"tasks"` key.
 
-##### **3. categories.json**
-- Περιέχει τις κατηγορίες που έχουν δημιουργηθεί από τον χρήστη ή είναι προκαθορισμένες.
-- Δομή:
-  ```json
-  ["Work", "Personal", "Shopping"]
-  ```
+**3. Task Status Management:**
 
-##### **4. priorities.json**
-- Περιέχει τις προτεραιότητες που έχουν δημιουργηθεί από τον χρήστη ή είναι προκαθορισμένες.
-- Δομή:
-  ```json
-  ["High", "Medium", "Low"]
-  ```
+A significant feature of the system is task status management. Tasks are assigned a status from the `TaskStatus` Enum, which includes values such as:
+- `OPEN`
+- `IN_PROGRESS`
+- `COMPLETED`
+- `POSTPONED`
+- `DELAYED`
 
----
+Each task's status is updated as it progresses through its lifecycle. The status is stored in the task's JSON representation and is displayed in the UI as a string, making it user-friendly. For instance, the `COMPLETED` status is displayed as "Completed" in the GUI, even though the backend uses the enum constant `TaskStatus.COMPLETED`.
 
-#### 3. Μη Υλοποιημένες Λειτουργικότητες
+**4. Functionality Not Implemented:**
 
-1. **Περισσότερες ενέργειες για τις υπενθυμίσεις**: Ενώ οι υπενθυμίσεις μπορούν να προστεθούν ή να διαγραφούν, δεν υπάρχει λειτουργικότητα για επεξεργασία ή ειδοποιήσεις.
-2. **Αναφορές καθυστερημένων εργασιών**: Ενώ οι εργασίες μπορούν να μαρκάρονται ως καθυστερημένες, δεν υπάρχει πλήρης αναφορά για αυτές.
-3. **Διαχείριση πολλών χρηστών**: Η εφαρμογή υποστηρίζει μόνο έναν χρήστη ανά χρονική στιγμή.
-4. **Ενσωμάτωση ειδοποιήσεων στο λειτουργικό σύστημα**.
+While the system offers a robust set of features, there are some functionalities that were not implemented in the final version:
+- **Task Reminders:** While reminders are conceptualized in the system, they are not fully implemented. Future work could involve setting up actual reminder notifications that alert users about approaching deadlines.
+- **Task Filtering by Priority:** Though tasks can be categorized and filtered by their status, filtering tasks by priority (e.g., showing only high-priority tasks) is not yet available.
+- **Advanced Task Statistics:** The statistics bar shows basic task counts (total, completed, delayed), but advanced analytics (e.g., tasks per priority, task completion rates) were not included in the current version.
 
----
+**5. Assumptions:**
 
-#### 4. Παραδοχές
+Several assumptions were made during the design and implementation of this system:
+- **Data Integrity:** It was assumed that tasks stored in the JSON file are valid and properly formatted. There is no error handling for corrupt or malformed JSON files.
+- **Single User:** The system is designed for a single user scenario and does not include multi-user support.
+- **No Network Connectivity:** The application assumes that it is used in a standalone mode with no reliance on network connectivity or cloud-based storage.
 
-1. **Δομή JSON**: Όλα τα αρχεία JSON θεωρείται ότι είναι σε σωστή μορφή και δεν περιέχουν ασυμβατότητες (π.χ., μη έγκυρα IDs).
-2. **Απλότητα χρήσης**: Ο χρήστης μπορεί να ορίσει προτεραιότητες και κατηγορίες πριν δημιουργήσει εργασίες.
-3. **Φορτωμένη κατάσταση**: Το σύστημα ξεκινά πάντα φορτώνοντας όλα τα δεδομένα από τα JSON αρχεία.
+#### Conclusion
 
----
-
-Η παραπάνω υλοποίηση βασίζεται στην απλότητα και επεκτασιμότητα. Η χρήση JSON για αποθήκευση επιτρέπει ευκολία στη διαχείριση και ενσωμάτωση σε μελλοντικά συστήματα.
+The Task Management System successfully enables users to create, manage, and track tasks with various categories and priorities. The application’s clean user interface, task status management, and JSON-based data persistence offer a simple but effective solution for managing tasks. Future improvements could focus on implementing the missing features such as task reminders and priority-based filtering.
