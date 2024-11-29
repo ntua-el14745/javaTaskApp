@@ -2,21 +2,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.AllRemindersController" alignment="CENTER" style="-fx-background-color: #f5f5f5; -fx-padding: 20px;">
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.AllRemindersController" 
+      style="-fx-background-color: #f5f5f5; -fx-padding: 20px;">
+    <!-- Include the statistics bar -->
+    <fx:include source="StatisticsBar.fxml" />
+    
     <!-- Title -->
-    <Label text="Active Reminders" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" />
-
-    <!-- Reminders Table -->
-    <TableView fx:id="remindersTable" prefHeight="300" style="-fx-pref-width: 100%; -fx-font-size: 14px;">
-        <columns>
-            <TableColumn fx:id="taskColumn" text="Task" prefWidth="200" style="-fx-font-size: 14px;" />
-            <TableColumn fx:id="dateColumn" text="Date" prefWidth="150" style="-fx-font-size: 14px;" />
-            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" style="-fx-font-size: 14px;" />
-        </columns>
-    </TableView>
+    <HBox alignment="CENTER">
+        <Label text="Active Reminders" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+    </HBox>
+    
+    <!-- Centered Table -->
+    <HBox alignment="CENTER" spacing="10">
+        <TableView fx:id="remindersTable" prefHeight="300" prefWidth="400" 
+                   style="-fx-font-size: 14px; -fx-border-color: #ccc; -fx-border-width: 1px;">
+            <columns>
+                <TableColumn fx:id="taskColumn" text="Task" prefWidth="150" style="-fx-font-size: 14px; -fx-alignment: CENTER;" />
+                <TableColumn fx:id="dateColumn" text="Date" prefWidth="150" style="-fx-font-size: 14px; -fx-alignment: CENTER;" />
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="100" style="-fx-font-size: 14px; -fx-alignment: CENTER;" />
+            </columns>
+        </TableView>
+    </HBox>
 
     <!-- Back Button -->
     <HBox spacing="20" alignment="CENTER">
-        <Button text="Back" onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
+        <Button text="Back" onAction="#handleBack" 
+                style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #607D8B; 
+                       -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
     </HBox>
 </VBox>
