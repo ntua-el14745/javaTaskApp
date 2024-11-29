@@ -3,25 +3,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.MainController" spacing="20" alignment="CENTER" style="-fx-background-color: #fafafa; -fx-padding: 30px;">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.MainController" spacing="80" style="-fx-background-color: #f5f5f5; -fx-padding: 20px;">
     
     <!-- Information Section at the Top with Border -->
-    <BorderPane prefWidth="400" prefHeight="250" style="-fx-border-color: #0078D4; -fx-border-width: 3px; -fx-background-color: #ffffff; -fx-border-radius: 10px;">
-        <center>
-            <VBox spacing="20" alignment="CENTER">
-                <Label fx:id="totalTasksLabel" text="Total Tasks: 0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
-                <Label fx:id="completedTasksLabel" text="Completed Tasks: 0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
-                <Label fx:id="delayedTasksLabel" text="Delayed Tasks: 0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
-                <Label fx:id="upcomingTasksLabel" text="Upcoming Tasks (within 7 days): 0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
-            </VBox>
-        </center>
-    </BorderPane>
-
+    <fx:include source="StatisticsBar.fxml" />
     <!-- Navigation Buttons -->
-    <VBox spacing="15" alignment="CENTER" style="-fx-padding-top: 30px;">
-        <Button text="View All Tasks" fx:id="taskButton" onAction="#navigateToTaskScene" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
-        <Button text="View All Reminders" fx:id="reminderButton" onAction="#navigateToReminderScene" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #FF9800; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
-        <Button text="View All Categories" fx:id="categoryButton" onAction="#navigateToCategoryScene" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
-        <Button text="View All Priorities" fx:id="priorityButton" onAction="#navigateToPriorityScene" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #FF5722; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
+    <VBox spacing="15" alignment="CENTER" style="-fx-padding-top: 80px;">
+        <Button text="View All Tasks" fx:id="taskButton" onAction="#navigateToTaskScene" prefWidth="500" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 30px 40px; -fx-border-radius: 5px;" />
+        <Button text="View All Reminders" fx:id="reminderButton" onAction="#navigateToReminderScene" prefWidth="500" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #FF9800; -fx-text-fill: white; -fx-padding: 30px 40px; -fx-border-radius: 5px;" />
+        <Button text="View All Categories" fx:id="categoryButton" onAction="#navigateToCategoryScene" prefWidth="500" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 30px 40px; -fx-border-radius: 5px;" />
+        <Button text="View All Priorities" fx:id="priorityButton" onAction="#navigateToPriorityScene" prefWidth="500" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #FF5722; -fx-text-fill: white; -fx-padding: 30px 40px; -fx-border-radius: 5px;" />
     </VBox>
 </VBox>

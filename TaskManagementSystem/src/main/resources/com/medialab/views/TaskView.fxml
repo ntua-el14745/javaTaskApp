@@ -10,9 +10,13 @@
 <?import javafx.scene.control.Label?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.medialab.controllers.TaskController" style="-fx-background-color: #f5f5f5; -fx-padding: 20px;">
+   
+    
     <!-- Top Section: Search Bar and Filters -->
     <top>
         <VBox spacing="15" alignment="CENTER">
+        <fx:include source="StatisticsBar.fxml" />
+
             <!-- Search Bar -->
             <HBox spacing="10" alignment="CENTER">
                 <Label fx:id="searchLabel" text="Search" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
@@ -34,20 +38,22 @@
 
     <!-- Center Section: Task Table -->
     <center>
-        <TreeTableView fx:id="taskTreeTable" style="-fx-font-size: 14px;">
-            <columns>
-                <TreeTableColumn text="Title" fx:id="titleColumn" />
-                <TreeTableColumn text="Status" fx:id="statusColumn" />
-                <TreeTableColumn text="Actions" fx:id="actionsColumn" />
-            </columns>
-        </TreeTableView>
+        <HBox spacing="10" alignment="CENTER">
+            <TreeTableView fx:id="taskTreeTable" prefHeight="300" prefWidth="1000" style="-fx-font-size: 14px; ">
+                <columns>
+                    <TreeTableColumn text="Title" fx:id="titleColumn" prefWidth="150" style="-fx-font-size: 14px; -fx-alignment: CENTER;"/>
+                    <TreeTableColumn text="Status" fx:id="statusColumn" prefWidth="150" style="-fx-font-size: 14px; -fx-alignment: CENTER;"/>
+                    <TreeTableColumn text="Actions" fx:id="actionsColumn" prefWidth="700" style="-fx-font-size: 14px; -fx-alignment: CENTER;"/>
+                </columns>
+            </TreeTableView>
+        </HBox>
     </center>
 
     <!-- Bottom Section: Action Buttons -->
     <bottom>
         <HBox spacing="20" alignment="CENTER" style="-fx-padding: 10px;">
-            <Button text="Back" onAction="#goBack" style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
             <Button text="Create Task" onAction="#navigateToCreateTask" style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
+            <Button text="Back" onAction="#goBack" style="-fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-color: #607D8B; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px;" />
         </HBox>
     </bottom>
 </BorderPane>
