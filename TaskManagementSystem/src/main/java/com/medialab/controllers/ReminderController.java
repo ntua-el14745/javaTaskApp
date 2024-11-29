@@ -13,7 +13,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
-// import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.time.format.DateTimeFormatter;
@@ -36,13 +35,10 @@ public class ReminderController extends BaseController{
 
     public void initialize() {
         taskManager = TaskManager.getInstance();
-
         // Set up columns
         dateColumn.setCellValueFactory(param -> 
         new SimpleStringProperty(param.getValue().getReminderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         );
-        // timeColumn.setCellValueFactory(param -> param.getValue().getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-
         setupActionsColumn();
     }
 
@@ -61,6 +57,7 @@ public class ReminderController extends BaseController{
         private final Button editButton = new Button("Edit");
 
         {
+            deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10; -fx-alignment: CENTER;");
             deleteButton.setOnAction(event -> handleDeleteReminder(getTableRow().getItem()));
             editButton.setOnAction(event -> handleEditReminder(getTableRow().getItem()));
         }
