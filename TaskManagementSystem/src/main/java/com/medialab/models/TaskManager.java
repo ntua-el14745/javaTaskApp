@@ -47,9 +47,28 @@ public class TaskManager {
     private static final String PRIORITIES_FILE = "medialab/priorities.json";
 
     // Default priority value
-    private static final String DEFAULT_PRIORITY = "Default";
+    public static final String DEFAULT_PRIORITY = "Default";
 
     private ObjectMapper objectMapper;
+    private List<Runnable> changeListeners = new ArrayList<>();
+
+    /**
+     * Adds event listeners in the changeListeners ArrayList
+     *
+     * @param listener The listener to be added.
+     */
+    public void addChangeListener(Runnable listener) {
+        changeListeners.add(listener);
+    }
+    /**
+     * Notifies event listeners in the changeListeners ArrayList
+     *
+     */
+    private void notifyChangeListeners() {
+        for (Runnable listener : changeListeners) {
+            listener.run();
+        }
+    }
      /**
      * Private constructor to initialize TaskManager as a singleton.
      * Loads existing data from JSON files or initializes empty collections if files do not exist.
@@ -228,6 +247,7 @@ public class TaskManager {
             task.setId(UUID.randomUUID().toString());
             }
             tasks.add(task);
+            notifyChangeListeners();
         }
 
         /**
@@ -239,6 +259,7 @@ public class TaskManager {
             tasks.remove(task);
             // Remove all reminders related to this task
             reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
+            notifyChangeListeners();
         }
 
         /**
@@ -255,6 +276,7 @@ public class TaskManager {
             task.setDescription(description);
             task.setPriority(priority);
             task.setDeadline(dueDate);
+            notifyChangeListeners();
         }
 
 
@@ -342,10 +364,9 @@ public class TaskManager {
          */
         public void markTaskAsCompleted(Task task) {
             task.setStatus(TaskStatus.COMPLETED);
-        
             // Remove associated reminders
             reminders.removeIf(reminder -> reminder.getRelatedTask().equals(task.getId()));
-            saveReminders(); // Save changes to reminders
+            notifyChangeListeners();
         }
         
          /**
@@ -498,6 +519,9 @@ public class TaskManager {
           * @param priority The priority to be deleted.
           */
         public void deletePriority(String priority) {
+            if (priority.equals(DEFAULT_PRIORITY)) { // Prevent deletion of the default priority
+                throw new IllegalArgumentException("The Default priority cannot be deleted.");
+            }
             if (priorities.remove(priority)) {
                 // Update tasks with the deleted priority to the default priority
                 for (Task task : tasks) {
