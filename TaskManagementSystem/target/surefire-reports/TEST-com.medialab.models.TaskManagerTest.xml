@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.medialab.models.TaskManagerTest" time="0.219" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.medialab.models.TaskManagerTest" time="0.2" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -13,7 +13,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/ge0/github/javaTaskApp/TaskManagementSystem/target/surefire/surefirebooter9502692856674575978.jar /home/ge0/github/javaTaskApp/TaskManagementSystem/target/surefire 2024-11-24T21-56-24_938-jvmRun1 surefire7435373453858732178tmp surefire_08613860352355639816tmp"/>
+    <property name="sun.java.command" value="/home/ge0/github/javaTaskApp/TaskManagementSystem/target/surefire/surefirebooter12400415043998719594.jar /home/ge0/github/javaTaskApp/TaskManagementSystem/target/surefire 2024-11-29T18-28-04_598-jvmRun1 surefire4541842661198195218tmp surefire_01733356009318559516tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/ge0/github/javaTaskApp/TaskManagementSystem/target/test-classes:/home/ge0/github/javaTaskApp/TaskManagementSystem/target/classes:/home/ge0/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/home/ge0/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/home/ge0/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/ge0/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/home/ge0/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/ge0/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/home/ge0/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/home/ge0/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.15.1/jackson-databind-2.15.1.jar:/home/ge0/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.15.1/jackson-annotations-2.15.1.jar:/home/ge0/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.15.1/jackson-core-2.15.1.jar:/home/ge0/.m2/repository/org/assertj/assertj-core/3.22.0/assertj-core-3.22.0.jar:/home/ge0/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.0/jackson-datatype-jsr310-2.15.0.jar:/home/ge0/.m2/repository/org/openjfx/javafx-controls/23/javafx-controls-23.jar:/home/ge0/.m2/repository/org/openjfx/javafx-controls/23/javafx-controls-23-linux.jar:/home/ge0/.m2/repository/org/openjfx/javafx-graphics/23/javafx-graphics-23.jar:/home/ge0/.m2/repository/org/openjfx/javafx-graphics/23/javafx-graphics-23-linux.jar:/home/ge0/.m2/repository/org/openjfx/javafx-base/23/javafx-base-23.jar:/home/ge0/.m2/repository/org/openjfx/javafx-base/23/javafx-base-23-linux.jar:/home/ge0/.m2/repository/org/openjfx/javafx-fxml/23/javafx-fxml-23.jar:/home/ge0/.m2/repository/org/openjfx/javafx-fxml/23/javafx-fxml-23-linux.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/ge0/github/javaTaskApp/TaskManagementSystem/target/surefire/surefirebooter9502692856674575978.jar"/>
+    <property name="surefire.real.class.path" value="/home/ge0/github/javaTaskApp/TaskManagementSystem/target/surefire/surefirebooter12400415043998719594.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.5+11-Ubuntu-1ubuntu124.04"/>
     <property name="user.name" value="ge0"/>
@@ -54,5 +54,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testAddTask" classname="com.medialab.models.TaskManagerTest" time="0.209"/>
+  <testcase name="testAddTask" classname="com.medialab.models.TaskManagerTest" time="0.193"/>
 </testsuite>

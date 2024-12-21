@@ -1,11 +1,13 @@
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/EditTaskController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/TaskController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/MainController.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/utils/EditReminderDialog.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/Reminder.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/Task.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/TaskStatus.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/BaseController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/TaskManager.java
+/home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/StatisticsBarController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/ReminderController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/controllers/ViewTaskController.java
 /home/ge0/github/javaTaskApp/TaskManagementSystem/src/main/java/com/medialab/models/Priority.java
