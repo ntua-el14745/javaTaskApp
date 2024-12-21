@@ -1,87 +1,128 @@
-### Project Report: Task Management System
+### Project Report: Task Management System  
 
-#### General Description
+#### General Description  
 
-The project aims to implement a Task Management System, designed to help users create, manage, and track tasks efficiently. The system allows users to add tasks, categorize them, set priorities, and define deadlines. In addition, users can view all tasks, filter tasks by category, and track the status of tasks such as "Open," "In Progress," "Completed," and "Delayed."
+The Task Management System is a standalone Java application designed to assist users in organizing and managing their tasks efficiently. It allows users to create, categorize, prioritize, and track tasks using an intuitive graphical user interface (GUI) built with JavaFX. Key features include task categorization, priority setting, status tracking, reminders for upcoming tasks, and viewing statistics related to task completion.  
 
-The system is built using JavaFX, which provides an intuitive graphical user interface (GUI) for task management. The application features multiple views, such as a "Create Task" scene for adding new tasks, a "View All Tasks" scene for browsing existing tasks, and a "Reminders" feature that notifies users about upcoming tasks.
+The application operates entirely offline, storing task data in structured JSON files for persistence. The modular design and clear separation of concerns ensure ease of maintenance and scalability for future enhancements.  
 
-The system also supports functionality for removing reminders and categorizing tasks into predefined categories. Additionally, users can filter tasks based on their status and categorize them by priority. The program leverages an Enum class to define task statuses and ensure that tasks are organized and displayed correctly.
+---
 
-#### Design and Implementation
+#### Design and Implementation  
 
-**1. User Interface (UI) Design:**
+**1. Overall Structure**  
 
-The user interface of the system was designed with simplicity and ease of use in mind. The main components of the UI are:
+The application follows an object-oriented design, with the core logic encapsulated in Java classes and the user interface managed via JavaFX. The main components include:  
+- **Task Management:** Handles task creation, updates, and deletion.  
+- **Data Persistence:** Utilizes JSON files to store tasks, categories, and priorities.  
+- **User Interface:** Provides scenes for creating, viewing, and managing tasks, with a consistent layout and intuitive navigation.  
 
-- **Task Creation Scene:** This scene allows users to input details such as task title, description, deadline, category, and priority. Upon completing this form, users can save the task to the system.
-- **Task View Scene:** In this scene, users can view a list of all tasks, with options to filter tasks by category and status. Tasks are displayed in a tree structure to represent different categories and their respective tasks.
-- **Statistics Bar:** A horizontal bar displaying key statistics such as the total number of tasks, completed tasks, and delayed tasks.
-- **Reminders:** A section where users can set up reminders for tasks and view upcoming deadlines.
+**2. Class Design**  
 
-**2. Data Structure:**
+The system's functionality is structured into the following key classes:  
+- **`Task` Class:** Represents an individual task, encapsulating attributes such as title, description, category, priority, status, and deadline.  
+- **`Category` and `Priority` Classes:** Represent task categories and priorities, ensuring modularity and allowing dynamic additions without altering the core logic.  
+- **`TaskManager` Singleton Class:** Acts as the central controller for managing tasks, handling data loading and saving to JSON, and providing filtered views of tasks based on status or category.  
+- **`TaskStatus` Enum:** Defines the lifecycle states of a task, such as `OPEN`, `IN_PROGRESS`, and `COMPLETED`, ensuring consistent handling of statuses throughout the application.  
 
-The application stores tasks and other relevant data in Java objects. The `Task` class holds the main task attributes such as the title, description, category, priority, deadline, and status. Additionally, an Enum class called `TaskStatus` defines the possible states of a task, such as `OPEN`, `IN_PROGRESS`, `COMPLETED`, `POSTPONED`, and `DELAYED`. This helps manage the workflow of tasks within the system and allows for easy updates on task progress.
+The application's UI is tightly integrated with the backend through JavaFX controllers. Each scene is linked to a specific controller that manages user interactions and updates the application state accordingly.  
 
-Data persistence is handled using a file-based approach, where tasks are saved to JSON files. Each task is serialized into a JSON object, and all tasks are saved to a central JSON file. Upon starting the application, the tasks are deserialized back into Java objects to load the current state of the task list.
+---
 
-The JSON structure is organized in a way that reflects the hierarchical nature of the task categories. The main JSON file contains an array of task objects, each with attributes such as title, description, category, priority, status, and deadline. 
+#### JSON Data Structure  
 
-**Sample JSON Structure:**
+**1. Tasks JSON**  
+Tasks are stored in an array structure, where each task is represented as an object with attributes such as title, description, deadline, status, category, and priority.  
 
-```json
+Example:  
+```json  
 {
   "tasks": [
     {
-      "title": "Finish Homework",
-      "description": "Complete the physics assignment",
-      "category": "Education",
-      "priority": "High",
-      "status": "OPEN",
-      "deadline": "2024-12-05"
-    },
-    {
-      "title": "Buy Groceries",
-      "description": "Purchase vegetables and fruits",
-      "category": "Shopping",
-      "priority": "Low",
-      "status": "COMPLETED",
-      "deadline": "2024-11-28"
+      "title" : "Task 21 dec",
+      "description" : "testing task",
+      "category" : {
+        "name" : "Personal"
+      },
+      "priority" : {
+        "name" : "High"
+      },
+      "deadline" : [ 2025, 1, 1 ],
+      "id" : "58571fa2-4668-442a-9fd1-a610604f1e68",
+      "status" : "OPEN",
+      "reminders" : [ {
+        "reminderDate" : [ 2024, 12, 25 ],
+        "relatedTask" : "58571fa2-4668-442a-9fd1-a610604f1e68",
+        "reminderType" : "ONE_WEEK_BEFORE",
+        "message" : "Default Reminder Message",
+        "notified" : false,
+        "id" : "1707360f-f91f-49d7-9c95-381560b14de0"
+      }, {
+        "reminderDate" : [ 2024, 12, 31 ],
+        "relatedTask" : "58571fa2-4668-442a-9fd1-a610604f1e68",
+        "reminderType" : "ONE_DAY_BEFORE",
+        "message" : "Default Reminder Message",
+        "notified" : false,
+        "id" : "10f57d50-62de-41b8-a1e3-35587179d172"
+      } ],
+      "reminderDate" : [ 2024, 12, 25 ],
+      "titleProp" : {
+        "value" : "Task 21 dec",
+        "bean" : null,
+        "name" : "",
+        "bound" : false,
+        "valueSafe" : "Task 21 dec"
+      },
+      "descriptionProp" : {
+        "value" : "testing task",
+        "bean" : null,
+        "name" : "",
+        "bound" : false,
+        "valueSafe" : "testing task"
+      }
     }
   ]
 }
-```
+```  
 
-In this structure:
-- Each task is represented as a JSON object.
-- Attributes such as `title`, `description`, `category`, `priority`, `status`, and `deadline` are stored as key-value pairs.
-- The array of tasks is encapsulated in a top-level object under the `"tasks"` key.
+**2. Categories and Priorities JSON**  
+Categories and priorities are maintained in separate JSON arrays to allow dynamic updates. These arrays are loaded during application initialization to populate dropdown menus in the UI.  
 
-**3. Task Status Management:**
+Example of Priorities JSON:  
+```json  
+[ "Default", "High", "Low", "Urgent" ]  
+```  
+Example of Categories JSON:  
+```json  
+[ "Work", "Education", "Personal", "Shopping" ]  
+```  
 
-A significant feature of the system is task status management. Tasks are assigned a status from the `TaskStatus` Enum, which includes values such as:
-- `OPEN`
-- `IN_PROGRESS`
-- `COMPLETED`
-- `POSTPONED`
-- `DELAYED`
+This separation ensures flexibility, allowing categories and priorities to be updated without impacting the tasks JSON structure.  
 
-Each task's status is updated as it progresses through its lifecycle. The status is stored in the task's JSON representation and is displayed in the UI as a string, making it user-friendly. For instance, the `COMPLETED` status is displayed as "Completed" in the GUI, even though the backend uses the enum constant `TaskStatus.COMPLETED`.
+(Reminders JSON store the same data as the reminders field in Tasks)
 
-**4. Functionality Not Implemented:**
+---
 
-While the system offers a robust set of features, there are some functionalities that were not implemented in the final version:
-- **Task Reminders:** While reminders are conceptualized in the system, they are not fully implemented. Future work could involve setting up actual reminder notifications that alert users about approaching deadlines.
-- **Task Filtering by Priority:** Though tasks can be categorized and filtered by their status, filtering tasks by priority (e.g., showing only high-priority tasks) is not yet available.
-- **Advanced Task Statistics:** The statistics bar shows basic task counts (total, completed, delayed), but advanced analytics (e.g., tasks per priority, task completion rates) were not included in the current version.
+#### Functionality Highlights  
 
-**5. Assumptions:**
+**1. Task Management**  
+- **Task Creation:** Users can define a title, description, category, priority, and deadline when creating a task.  
+- **Task Viewing:** Tasks are displayed in a tree structure organized by categories, providing a clear overview.  
+- **Status Updates:** Users can mark tasks as completed, postponed, or delayed, and the system automatically tracks task statuses based on deadlines.  
 
-Several assumptions were made during the design and implementation of this system:
-- **Data Integrity:** It was assumed that tasks stored in the JSON file are valid and properly formatted. There is no error handling for corrupt or malformed JSON files.
-- **Single User:** The system is designed for a single user scenario and does not include multi-user support.
-- **No Network Connectivity:** The application assumes that it is used in a standalone mode with no reliance on network connectivity or cloud-based storage.
+**2. Reminders**  
+- **Application-Based Reminders:** The app now includes reminders for upcoming tasks, notifying users within the interface. External OS-level reminders remain unimplemented but could be added in future iterations.  
 
-#### Conclusion
+**3. Statistics**  
+The application provides a visual overview of total tasks, completed tasks, and delayed tasks in a horizontal statistics bar. This allows users to assess their productivity at a glance.  
 
-The Task Management System successfully enables users to create, manage, and track tasks with various categories and priorities. The application’s clean user interface, task status management, and JSON-based data persistence offer a simple but effective solution for managing tasks. Future improvements could focus on implementing the missing features such as task reminders and priority-based filtering.
+---
+
+
+#### Assumptions  
+
+1. **Data Integrity:** It is assumed that all JSON files are valid and properly formatted. The application does not include error handling for corrupt or incomplete JSON data.  
+2. **Task Uniqueness:** Tasks are assumed to have unique titles for identification within the system.  
+3. **Standalone Usage:** The application operates offline, without network connectivity or cloud-based synchronization.  
+
+
